@@ -13,8 +13,9 @@ namespace D0lenaBot.Server
         public override void Configure(IFunctionsHostBuilder builder)
         {
             builder.Services.AddScoped<IFetchDollarCommand, FetchDollarCommand>();
-            builder.Services.AddScoped<IDolarSiProvider, DolarSiProvider>();
             builder.Services.AddScoped<IExchangeRates, ExchangeRatesRepository>();
+            builder.Services.AddScoped<IDolarSiProvider, DolarSiProvider>();
+            builder.Services.AddScoped<IDolarSiHtmlLoader, DolarSiHtmlLoader>();
         }
     }
 }
