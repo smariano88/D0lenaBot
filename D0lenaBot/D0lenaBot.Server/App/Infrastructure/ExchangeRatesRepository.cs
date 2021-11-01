@@ -41,13 +41,13 @@ namespace D0lenaBot.Server.App.Infrastructure
 
                 Console.WriteLine("Created item in database with id: {0} Operation consumed {1} RUs.\n", exchangeRateResponse.Resource.Id, exchangeRateResponse.RequestCharge);
             }
-            catch (CosmosException ex) when (ex.StatusCode == HttpStatusCode.Conflict)
+            catch (CosmosException cosmosEx) when (cosmosEx.StatusCode == HttpStatusCode.Conflict)
             {
                 Console.WriteLine("Item in database with id: {0} already exists\n", exchangeRate.Id);
             }
-            catch (Exception ex2)
+            catch (Exception ex)
             {
-                Console.WriteLine(ex2.Message);
+                Console.WriteLine(ex.Message);
             }
 
             Console.WriteLine("saved");

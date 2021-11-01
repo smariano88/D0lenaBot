@@ -1,4 +1,4 @@
-using D0lenaBot.Server.App.Application.FetchDollarQuery;
+using D0lenaBot.Server.App.Application.FetchDollarCommand;
 using Microsoft.Azure.WebJobs;
 using Microsoft.Extensions.Logging;
 using System;
@@ -8,9 +8,9 @@ namespace D0lenaBot.Server
 {
     public class FetchDollarExchangeRates
     {
-        private readonly IFetchDollarQuery fetchDollarQuery;
+        private readonly IFetchDollarCommand fetchDollarQuery;
 
-        public FetchDollarExchangeRates(IFetchDollarQuery fetchDollarQuery)
+        public FetchDollarExchangeRates(IFetchDollarCommand fetchDollarQuery)
         {
             this.fetchDollarQuery = fetchDollarQuery;
         }

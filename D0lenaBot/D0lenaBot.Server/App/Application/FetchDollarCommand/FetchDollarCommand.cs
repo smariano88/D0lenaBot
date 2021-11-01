@@ -2,13 +2,13 @@
 using System;
 using System.Threading.Tasks;
 
-namespace D0lenaBot.Server.App.Application.FetchDollarQuery
+namespace D0lenaBot.Server.App.Application.FetchDollarCommand
 {
-    internal class FetchDollarQuery : IFetchDollarQuery
+    internal class FetchDollarCommand : IFetchDollarCommand
     {
         private readonly IDolarSiProvider dollarSiProvider;
         private readonly IExchangeRates exchangeRates;
-        public FetchDollarQuery(IDolarSiProvider dollarSiProvider, IExchangeRates exchangeRates)
+        public FetchDollarCommand(IDolarSiProvider dollarSiProvider, IExchangeRates exchangeRates)
         {
             this.dollarSiProvider = dollarSiProvider;
             this.exchangeRates = exchangeRates;

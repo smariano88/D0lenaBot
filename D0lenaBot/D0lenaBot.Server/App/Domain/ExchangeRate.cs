@@ -11,7 +11,7 @@ namespace D0lenaBot.Server.App.Domain
         }
 
         [JsonProperty(PropertyName = "id")]
-        public string Id { get; set; } = new Guid().ToString();
+        public string Id { get; set; } = Guid.NewGuid().ToString();
 
         public DateTime Date { get; set; }
         public ExchangeRateValues Rate { get; set; }
