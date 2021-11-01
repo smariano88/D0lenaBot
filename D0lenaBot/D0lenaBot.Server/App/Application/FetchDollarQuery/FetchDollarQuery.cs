@@ -1,21 +1,23 @@
-﻿using Microsoft.Extensions.Logging;
+﻿using D0lenaBot.Server.App.Application.Infrastructure;
 using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace D0lenaBot.Server.App.Application.FetchDollarQuery
 {
     internal class FetchDollarQuery : IFetchDollarQuery
     {
-        private readonly ILogger logger;
-        public FetchDollarQuery(ILogger<FetchDollarQuery> logger)
+        private readonly IDolarSiProvider dollarSiProvider;
+        private readonly IExchangeRates exchangeRates;
+        public FetchDollarQuery(IDolarSiProvider dollarSiProvider, IExchangeRates exchangeRates)
         {
-            this.logger = logger;
+            this.dollarSiProvider = dollarSiProvider;
+            this.exchangeRates = exchangeRates;
         }
 
         public void Fetch(DateTime date)
         {
-            this.logger.LogError($"hello from logs {date}");
+            var currentExchangeRate = this.dollarSiProvider.GetCurrentExchangeRate();
+
+            this.exchangeRates.Save(currentExchangeRate);
         }
     }
 }

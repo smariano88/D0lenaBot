@@ -17,8 +17,4 @@
       <CopyToPublishDirectory>Never</CopyToPublishDirectory>
     </None>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="App\Domain\" />
-    <Folder Include="App\_DI\" />
-  </ItemGroup>
 </Project>

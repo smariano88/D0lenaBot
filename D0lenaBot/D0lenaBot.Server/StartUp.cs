@@ -1,4 +1,6 @@
 ﻿using D0lenaBot.Server.App.Application.FetchDollarQuery;
+using D0lenaBot.Server.App.Application.Infrastructure;
+using D0lenaBot.Server.App.Infrastructure;
 using Microsoft.Azure.Functions.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -10,7 +12,9 @@ namespace D0lenaBot.Server
     {
         public override void Configure(IFunctionsHostBuilder builder)
         {
-            builder.Services.AddSingleton<IFetchDollarQuery, FetchDollarQuery>();
+            builder.Services.AddScoped<IFetchDollarQuery, FetchDollarQuery>();
+            builder.Services.AddScoped<IDolarSiProvider, DolarSiProvider>();
+            builder.Services.AddScoped<IExchangeRates, ExchangeRatesRepository>();
         }
     }
 }
