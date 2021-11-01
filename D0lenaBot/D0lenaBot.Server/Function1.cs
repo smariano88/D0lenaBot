@@ -1,6 +1,8 @@
 using D0lenaBot.Server.App.Application.FetchDollarQuery;
 using Microsoft.Azure.WebJobs;
+using Microsoft.Extensions.Logging;
 using System;
+using System.Threading.Tasks;
 
 namespace D0lenaBot.Server
 {
@@ -14,9 +16,17 @@ namespace D0lenaBot.Server
         }
 
         [FunctionName("FetchDollarExchangeRate")]
-        public void Run([TimerTrigger("0 30 10 * * *")] TimerInfo myTimer)
+        public async Task Run([TimerTrigger("0 30 10 * * *")] TimerInfo myTimer, ILogger logger)
         {
-            this.fetchDollarQuery.Fetch(DateTime.Now);
+            try
+            {
+                await this.fetchDollarQuery.Fetch(DateTime.Now);
+            }
+            catch (Exception ex)
+            {
+                logger.LogError(ex.Message, ex);
+                throw;
+            }
         }
     }
 }

@@ -1,5 +1,6 @@
 ﻿using D0lenaBot.Server.App.Application.Infrastructure;
 using System;
+using System.Threading.Tasks;
 
 namespace D0lenaBot.Server.App.Application.FetchDollarQuery
 {
@@ -13,11 +14,11 @@ namespace D0lenaBot.Server.App.Application.FetchDollarQuery
             this.exchangeRates = exchangeRates;
         }
 
-        public void Fetch(DateTime date)
+        public async Task Fetch(DateTime date)
         {
-            var currentExchangeRate = this.dollarSiProvider.GetCurrentExchangeRate();
+            var currentExchangeRate = await this.dollarSiProvider.GetCurrentExchangeRate();
 
-            this.exchangeRates.Save(currentExchangeRate);
+            await this.exchangeRates.Save(currentExchangeRate);
         }
     }
 }

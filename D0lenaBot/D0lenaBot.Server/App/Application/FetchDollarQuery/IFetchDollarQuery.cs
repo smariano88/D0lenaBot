@@ -1,11 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
+using System.Threading.Tasks;
 
 namespace D0lenaBot.Server.App.Application.FetchDollarQuery
 {
     public interface IFetchDollarQuery
     {
-        void Fetch(DateTime date);
+        Task Fetch(DateTime date);
     }
 }
