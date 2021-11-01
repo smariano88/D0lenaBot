@@ -3,7 +3,9 @@ using System;
 
 namespace D0lenaBot.Server.App.Domain
 {
-    // ToDo: decouple storage properties and decorators from domain model
+    // ToDo: 
+    // * Decouple storage properties and decorators from domain model.
+    // * Take a look at timezones for props: DateUTC and CreatedDateUTC
     public class ExchangeRate
     {
         public ExchangeRate()
@@ -13,7 +15,8 @@ namespace D0lenaBot.Server.App.Domain
         [JsonProperty(PropertyName = "id")]
         public string Id { get; set; } = Guid.NewGuid().ToString();
 
-        public DateTime Date { get; set; }
+        public DateTime DateUTC { get; set; }
+        public DateTime CreatedDateUTC { get; set; } = DateTime.UtcNow;
         public ExchangeRateValues Rate { get; set; }
         public ExchangeProvider Provider { get; set; }
         public string ProviderDescription => this.Provider.ToString();

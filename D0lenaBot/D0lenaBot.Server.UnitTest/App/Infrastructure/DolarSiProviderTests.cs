@@ -30,7 +30,7 @@ namespace D0lenaBot.Server.UnitTest.App.Infrastructure
             Assert.AreEqual(result.Rate.Buy, 194.50m);
             Assert.AreEqual(result.Rate.Sell, 197.50m);
             Assert.AreEqual(result.Provider, ExchangeProvider.DolarSi);
-            Assert.AreEqual(result.Date, new DateTime(2021, 10, 29, 0, 0, 0, DateTimeKind.Utc));
+            Assert.AreEqual(result.DateUTC, new DateTime(2021, 10, 29, 0, 0, 0, DateTimeKind.Utc));
         }
 
         private static HtmlDocument CreateMockHtmlDocument()

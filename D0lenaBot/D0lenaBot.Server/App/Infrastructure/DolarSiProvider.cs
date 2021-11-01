@@ -7,6 +7,9 @@ using System.Threading.Tasks;
 
 namespace D0lenaBot.Server.App.Infrastructure
 {
+    // ToDo: 
+    // * Refactor using SRP
+    // * Move URL to env variables
     internal class DolarSiProvider : IDolarSiProvider
     {
         private const string URL = "https://www.dolarsi.com/func/cotizacion_dolar_blue.php";
@@ -25,27 +28,10 @@ namespace D0lenaBot.Server.App.Infrastructure
 
             return new ExchangeRate()
             {
-                Date = date,
+                DateUTC = date,
                 Rate = rate,
                 Provider = ExchangeProvider.DolarSi
             };
-        }
-
-        private DateTime GetDate(HtmlDocument document)
-        {
-            var container = document.DocumentNode
-                                   .Descendants("div").Where(x => x.Attributes["class"].Value == "fecha")
-                                   .First();
-
-            var rawDate = container.InnerText.Split(" ")[1];
-            var splitDate = rawDate.Split("/");
-            var year = int.Parse(splitDate[2]);
-            var month = int.Parse(splitDate[1]);
-            var day = int.Parse(splitDate[0]);
-
-            var date = new DateTime(year, month, day, 0, 0, 0, DateTimeKind.Utc);
-
-            return date;
         }
 
         private ExchangeRateValues GetExchangeRate(HtmlDocument document)
@@ -68,6 +54,23 @@ namespace D0lenaBot.Server.App.Infrastructure
 
             var contentWithoutSign = content.Replace("$ ", "");
             return decimal.Parse(contentWithoutSign);
+        }
+
+        private DateTime GetDate(HtmlDocument document)
+        {
+            var container = document.DocumentNode
+                                   .Descendants("div").Where(x => x.Attributes["class"].Value == "fecha")
+                                   .First();
+
+            var rawDate = container.InnerText.Split(" ")[1];
+            var splitDate = rawDate.Split("/");
+            var year = int.Parse(splitDate[2]);
+            var month = int.Parse(splitDate[1]);
+            var day = int.Parse(splitDate[0]);
+
+            var date = new DateTime(year, month, day, 0, 0, 0, DateTimeKind.Utc);
+
+            return date;
         }
     }
 }
