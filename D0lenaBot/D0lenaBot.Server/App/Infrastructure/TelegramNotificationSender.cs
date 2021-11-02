@@ -38,10 +38,15 @@ namespace D0lenaBot.Server.App.Infrastructure
             string fecha = $"_Fecha coti_: {exchangeRate.DateUTC.ToString("dd/MM/yyyy")}";
             string tab = "      ";
             string exchangeTemplate = "💵 *{3}* " + newLine + tab + "${0} / ${1}" + newLine + tab + "Promedio: ${2}\\.";
+
             var average = (exchangeRate.Rate.Buy + exchangeRate.Rate.Sell) / 2;
 
-            var rate1 = string.Format(exchangeTemplate, exchangeRate.Rate.Buy, exchangeRate.Rate.Sell, average, exchangeRate.ProviderDescription);
+            var rate1 = string.Format(exchangeTemplate, cleanup(exchangeRate.Rate.Buy), cleanup(exchangeRate.Rate.Sell), cleanup(average), exchangeRate.ProviderDescription);
             return header + fecha + newLine + rate1 + newLine;
+        }
+        private string cleanup(decimal value)
+        {
+            return value.ToString().Replace(".", ",");
         }
     }
 }

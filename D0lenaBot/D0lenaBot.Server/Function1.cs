@@ -23,8 +23,8 @@ namespace D0lenaBot.Server
         {
             try
             {
-                await this.fetchDollarCommand.Fetch(DateTime.Now);
-                await this.notifyExchangeRateCommand.Send(DateTime.Now);
+                await this.fetchDollarCommand.Fetch(DateTime.UtcNow);
+                await this.notifyExchangeRateCommand.Send(DateTime.UtcNow);
             }
             catch (Exception ex)
             {

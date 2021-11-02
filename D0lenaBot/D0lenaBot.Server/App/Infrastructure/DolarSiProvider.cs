@@ -10,6 +10,7 @@ namespace D0lenaBot.Server.App.Infrastructure
     // ToDo: 
     // * Refactor using SRP
     // * Move URL to env variables
+    // * Localization for decimal separator
     internal class DolarSiProvider : IDolarSiProvider
     {
         private const string URL = "https://www.dolarsi.com/func/cotizacion_dolar_blue.php";
@@ -53,7 +54,7 @@ namespace D0lenaBot.Server.App.Infrastructure
             var content = valueContainer.Descendants("div").Where(x => x.Attributes["class"].Value == "val-cv").First().InnerHtml;
 
             var contentWithoutSign = content.Replace("$ ", "");
-            return decimal.Parse(contentWithoutSign);
+            return decimal.Parse(contentWithoutSign.Replace(",", "."));
         }
 
         private DateTime GetDate(HtmlDocument document)

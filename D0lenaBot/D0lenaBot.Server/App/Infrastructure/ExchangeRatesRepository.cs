@@ -76,7 +76,8 @@ namespace D0lenaBot.Server.App.Infrastructure
 
             try
             {
-                var sqlQueryText = $"SELECT * FROM c where c.CreatedDateUTC <= '{date.ToString("yyyy-MM-ddThh:mm:ss.fffZ")}' order by c.CreatedDateUTC desc OFFSET 0 LIMIT 1";
+                // where c.CreatedDateUTC <= '{date.ToString("yyyy-MM-ddThh:mm:ss.fffZ")}'
+                var sqlQueryText = $"SELECT * FROM c order by c.CreatedDateUTC desc OFFSET 0 LIMIT 1";
 
                 Console.WriteLine("Running query: {0}\n", sqlQueryText);
 
