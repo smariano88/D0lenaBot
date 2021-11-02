@@ -8,22 +8,24 @@ namespace D0lenaBot.Server.App.Infrastructure
     // ToDo: 
     // Apply SRP
     // Create unit test
-    // move some of the const to the env file
     internal class TelegramNotificationSender : INotificationSender
     {
         public const string baseUrl = "https://api.telegram.org/bot";
-        public const string token = "";
+        public readonly string telegramToken;
         public const string path = "/sendMessage?";
         private const string textParamName = "text=";
         private const string chatIdParamName = "chat_id=";
         private const string parse_mode = "parse_mode=MarkdownV2";
-
+        public TelegramNotificationSender(IEnvironmentVariablesProvider environmentVariablesProvider)
+        {
+            this.telegramToken = environmentVariablesProvider.GetTelegramToken();
+        }
         public async Task Send(ExchangeRate exchangeRate, string chatId)
         {
             string chatIdParameter = chatIdParamName + chatId;
             string textParameter = textParamName + this.GetText(exchangeRate);
 
-            string finalUrl = baseUrl + token + path + $"{parse_mode}&{chatIdParameter}&{textParameter}";
+            string finalUrl = baseUrl + telegramToken + path + $"{parse_mode}&{chatIdParameter}&{textParameter}";
 
             HttpClient req = new HttpClient();
             await req.GetAsync(finalUrl);

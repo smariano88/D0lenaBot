@@ -1,0 +1,17 @@
+{
+  "IsEncrypted": false,
+  "Values": {
+    "AzureWebJobsStorage": "UseDevelopmentStorage=true",
+    "FUNCTIONS_WORKER_RUNTIME": "dotnet",
+    "Telegram_token": "",
+    "CosmosDB_EndpointUrl": "",
+    "CosmosDB_PrimaryKey": "",
+    "CosmosDB_DatabaseId": "",
+    "CosmosDB_ContainerId": ""
+  },
+  "Host": {
+    "LocalHttpPort": 7071,
+    "CORS": "*",
+    "CORSCredentials": false
+  }
+}

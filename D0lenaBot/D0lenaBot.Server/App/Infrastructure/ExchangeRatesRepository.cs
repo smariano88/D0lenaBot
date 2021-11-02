@@ -3,6 +3,7 @@ using D0lenaBot.Server.App.Domain;
 using Microsoft.Azure.Cosmos;
 using System;
 using System.Collections.Generic;
+using System.Data.SqlTypes;
 using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
@@ -10,7 +11,6 @@ using System.Threading.Tasks;
 namespace D0lenaBot.Server.App.Infrastructure
 {
     // ToDo: 
-    // * Move instance variables to env files
     // * Create a proper instance of the cosmosClient
     // * Improve how the database and containers are created
     // * Think for one second about a proper PartitionKey
@@ -18,18 +18,20 @@ namespace D0lenaBot.Server.App.Infrastructure
     // * Improve how we read data from container
     internal class ExchangeRatesRepository : IExchangeRates
     {
-        private string EndpointUrl = "https://localhost:8081";
-        private string PrimaryKey = "C2y6yDjf5/R+ob0N8A7Cgv30VRDJIWEHLM+4QDU5DE2nQ9nDuVTqobD4b8mGGyPMbIZnqyMsEcaGQy67XIw/Jw==";
-
         private CosmosClient cosmosClient;
         private Database database;
         private Container container;
 
-        private string databaseId = "DollarExchangeRate";
-        private string containerId = "ExchangeRateContainer";
-        public ExchangeRatesRepository()
+        private readonly string databaseId;
+        private readonly string containerId;
+        public ExchangeRatesRepository(IEnvironmentVariablesProvider environmentVariablesProvider)
         {
-            this.cosmosClient = new CosmosClient(this.EndpointUrl, this.PrimaryKey);
+            this.databaseId = environmentVariablesProvider.GetDatabaseId();
+            this.containerId = environmentVariablesProvider.GetContainerId();
+
+            var endpointUrl = environmentVariablesProvider.GetDatabaseEndpointUrl();
+            var primaryKey = environmentVariablesProvider.GetDatabasePrimaryKey();
+            this.cosmosClient = new CosmosClient(endpointUrl, primaryKey);
 
         }
         public async Task Save(ExchangeRate exchangeRate)
@@ -74,7 +76,7 @@ namespace D0lenaBot.Server.App.Infrastructure
 
             try
             {
-                var sqlQueryText = "SELECT * FROM c where c.DateUTC = '2021-10-29T00:00:00Z'";
+                var sqlQueryText = $"SELECT * FROM c where c.CreatedDateUTC <= '{date.ToString("yyyy-MM-ddThh:mm:ss.fffZ")}' order by c.CreatedDateUTC desc OFFSET 0 LIMIT 1";
 
                 Console.WriteLine("Running query: {0}\n", sqlQueryText);
 

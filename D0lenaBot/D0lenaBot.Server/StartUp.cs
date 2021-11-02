@@ -19,6 +19,7 @@ namespace D0lenaBot.Server
             builder.Services.AddScoped<IDolarSiProvider, DolarSiProvider>();
             builder.Services.AddScoped<IDolarSiHtmlLoader, DolarSiHtmlLoader>();
             builder.Services.AddScoped<INotificationSender, TelegramNotificationSender>();
+            builder.Services.AddSingleton<IEnvironmentVariablesProvider, EnvironmentVariablesProvider>();
         }
     }
 }
