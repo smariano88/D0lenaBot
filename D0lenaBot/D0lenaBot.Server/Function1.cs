@@ -1,4 +1,5 @@
 using D0lenaBot.Server.App.Application.FetchDollarCommand;
+using D0lenaBot.Server.App.Application.NotifyExchangeRateCommand;
 using Microsoft.Azure.WebJobs;
 using Microsoft.Extensions.Logging;
 using System;
@@ -8,11 +9,13 @@ namespace D0lenaBot.Server
 {
     public class FetchDollarExchangeRates
     {
-        private readonly IFetchDollarCommand fetchDollarQuery;
+        private readonly IFetchDollarCommand fetchDollarCommand;
+        private readonly INotifyExchangeRateCommand notifyExchangeRateCommand;
 
-        public FetchDollarExchangeRates(IFetchDollarCommand fetchDollarQuery)
+        public FetchDollarExchangeRates(IFetchDollarCommand fetchDollarCommand, INotifyExchangeRateCommand notifyExchangeRateCommand)
         {
-            this.fetchDollarQuery = fetchDollarQuery;
+            this.fetchDollarCommand = fetchDollarCommand;
+            this.notifyExchangeRateCommand = notifyExchangeRateCommand;
         }
 
         [FunctionName("FetchDollarExchangeRate")]
@@ -20,7 +23,8 @@ namespace D0lenaBot.Server
         {
             try
             {
-                await this.fetchDollarQuery.Fetch(DateTime.Now);
+                await this.fetchDollarCommand.Fetch(DateTime.Now);
+                await this.notifyExchangeRateCommand.Send(DateTime.Now);
             }
             catch (Exception ex)
             {
