@@ -29,4 +29,7 @@
       <_Parameter1>D0lenaBot.Server.UnitTest</_Parameter1>
     </AssemblyAttribute>
   </ItemGroup>
+  <ItemGroup>
+    <FrameworkReference Include="Microsoft.AspNetCore.App" />
+  </ItemGroup>
 </Project>

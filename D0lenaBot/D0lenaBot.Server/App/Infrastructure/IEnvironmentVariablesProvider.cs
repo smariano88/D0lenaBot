@@ -11,5 +11,6 @@ namespace D0lenaBot.Server.App.Infrastructure
         string GetDatabasePrimaryKey();
         string GetDatabaseId();
         string GetContainerId();
+        string GetUsersContainerId();
     }
 }

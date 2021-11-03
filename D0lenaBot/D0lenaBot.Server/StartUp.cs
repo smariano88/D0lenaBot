@@ -1,6 +1,7 @@
 ﻿using D0lenaBot.Server.App.Application.FetchDollarCommand;
 using D0lenaBot.Server.App.Application.Infrastructure;
 using D0lenaBot.Server.App.Application.NotifyExchangeRateCommand;
+using D0lenaBot.Server.App.Application.RegisterUserCommand;
 using D0lenaBot.Server.App.Infrastructure;
 using Microsoft.Azure.Functions.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection;
@@ -15,7 +16,10 @@ namespace D0lenaBot.Server
         {
             builder.Services.AddScoped<IFetchDollarCommand, FetchDollarCommand>();
             builder.Services.AddScoped<INotifyExchangeRateCommand, NotifyExchangeRateCommand>();
+            builder.Services.AddScoped<IRegisterUserCommand, RegisterUserCommand>();
+
             builder.Services.AddScoped<IExchangeRates, ExchangeRatesRepository>();
+            builder.Services.AddScoped<IUsers, UsersRepository>();
             builder.Services.AddScoped<IDolarSiProvider, DolarSiProvider>();
             builder.Services.AddScoped<IDolarSiHtmlLoader, DolarSiHtmlLoader>();
             builder.Services.AddScoped<INotificationSender, TelegramNotificationSender>();

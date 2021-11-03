@@ -10,6 +10,7 @@ namespace D0lenaBot.Server
         private const string COSMOSDB_PRIMARYKEY = "CosmosDB_PrimaryKey";
         private const string COSMOSDB_DATABASEID = "CosmosDB_DatabaseId";
         private const string COSMOSDB_CONTAINERID = "CosmosDB_ContainerId";
+        private const string COSMOSDB_USERSCONTAINERID = "CosmosDB_UsersContainerId";
 
         public string GetTelegramToken()
         {
@@ -34,6 +35,11 @@ namespace D0lenaBot.Server
         public string GetContainerId()
         {
             return Environment.GetEnvironmentVariable(COSMOSDB_CONTAINERID);
+        }
+
+        public string GetUsersContainerId()
+        {
+            return Environment.GetEnvironmentVariable(COSMOSDB_USERSCONTAINERID);
         }
     }
 }
