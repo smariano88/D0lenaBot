@@ -1,4 +1,4 @@
-﻿using D0lenaBot.Server.App.Application.FetchDollarCommand;
+﻿using D0lenaBot.Server.App.Application.FetchDolarSiExchangeRateCommand;
 using D0lenaBot.Server.App.Application.Infrastructure;
 using D0lenaBot.Server.App.Application.NotifyExchangeRateCommand;
 using D0lenaBot.Server.App.Application.RegisterUserCommand;
@@ -14,7 +14,7 @@ namespace D0lenaBot.Server
     {
         public override void Configure(IFunctionsHostBuilder builder)
         {
-            builder.Services.AddScoped<IFetchDollarCommand, FetchDollarCommand>();
+            builder.Services.AddScoped<IFetchDolarSiExchangeRateCommand, FetchDolarSiExchangeRateCommand>();
             builder.Services.AddScoped<INotifyExchangeRateCommand, NotifyExchangeRateCommand>();
             builder.Services.AddScoped<IRegisterUserCommand, RegisterUserCommand>();
 
@@ -22,6 +22,7 @@ namespace D0lenaBot.Server
             builder.Services.AddScoped<IUsers, UsersRepository>();
             builder.Services.AddScoped<IDolarSiProvider, DolarSiProvider>();
             builder.Services.AddScoped<IDolarSiHtmlLoader, DolarSiHtmlLoader>();
+            builder.Services.AddScoped<IDolarSiValuesParser, DolarSiValuesParser>();
             builder.Services.AddScoped<INotificationSender, TelegramNotificationSender>();
             builder.Services.AddSingleton<IEnvironmentVariablesProvider, EnvironmentVariablesProvider>();
         }

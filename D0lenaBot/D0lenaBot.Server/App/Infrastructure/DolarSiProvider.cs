@@ -7,17 +7,16 @@ using System.Threading.Tasks;
 
 namespace D0lenaBot.Server.App.Infrastructure
 {
-    // ToDo: 
-    // * Refactor using SRP
-    // * Move URL to env variables
-    // * Localization for decimal separator
     internal class DolarSiProvider : IDolarSiProvider
     {
         private const string URL = "https://www.dolarsi.com/func/cotizacion_dolar_blue.php";
         private readonly IDolarSiHtmlLoader dolarSiHtmlLoader;
-        public DolarSiProvider(IDolarSiHtmlLoader dolarSiHtmlLoader)
+        private readonly IDolarSiValuesParser dolarSiValuesParser;
+
+        public DolarSiProvider(IDolarSiHtmlLoader dolarSiHtmlLoader, IDolarSiValuesParser dolarSiValuesParser)
         {
             this.dolarSiHtmlLoader = dolarSiHtmlLoader;
+            this.dolarSiValuesParser = dolarSiValuesParser;
         }
 
         public async Task<ExchangeRate> GetCurrentExchangeRate()
@@ -29,7 +28,7 @@ namespace D0lenaBot.Server.App.Infrastructure
 
             return new ExchangeRate()
             {
-                DateUTC = date,
+                ExchangeDateUTC = date,
                 Rate = rate,
                 Provider = ExchangeProvider.DolarSi
             };
@@ -41,20 +40,19 @@ namespace D0lenaBot.Server.App.Infrastructure
                                     .Descendants("div").Where(x => x.Attributes["class"].Value == "cont-cv")
                                     .First();
 
-            var buy = this.GetValue(container, "comp");
-            var sell = this.GetValue(container, "vent");
+            var buy = GetDecimalRate(container, "comp");
+            var sell = GetDecimalRate(container, "vent");
 
             return new ExchangeRateValues(buy, sell);
-        }
 
-        private decimal GetValue(HtmlNode container, string selector)
-        {
-            var valueContainer = container.Descendants("div").Where(x => x.Attributes["class"].Value == selector).First();
+            decimal GetDecimalRate(HtmlNode container, string selector)
+            {
+                var valueContainer = container.Descendants("div").Where(x => x.Attributes["class"].Value == selector).First();
 
-            var content = valueContainer.Descendants("div").Where(x => x.Attributes["class"].Value == "val-cv").First().InnerHtml;
+                var content = valueContainer.Descendants("div").Where(x => x.Attributes["class"].Value == "val-cv").First().InnerHtml;
 
-            var contentWithoutSign = content.Replace("$ ", "");
-            return decimal.Parse(contentWithoutSign.Replace(",", "."));
+                return this.dolarSiValuesParser.ParseRateToDecimal(content);
+            }
         }
 
         private DateTime GetDate(HtmlDocument document)
@@ -62,16 +60,9 @@ namespace D0lenaBot.Server.App.Infrastructure
             var container = document.DocumentNode
                                    .Descendants("div").Where(x => x.Attributes["class"].Value == "fecha")
                                    .First();
+            var content = container.InnerText;
 
-            var rawDate = container.InnerText.Split(" ")[1];
-            var splitDate = rawDate.Split("/");
-            var year = int.Parse(splitDate[2]);
-            var month = int.Parse(splitDate[1]);
-            var day = int.Parse(splitDate[0]);
-
-            var date = new DateTime(year, month, day, 0, 0, 0, DateTimeKind.Utc);
-
-            return date;
+            return this.dolarSiValuesParser.ParseDate(content);
         }
     }
 }

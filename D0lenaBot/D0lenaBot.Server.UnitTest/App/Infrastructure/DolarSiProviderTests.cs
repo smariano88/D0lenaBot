@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 
 namespace D0lenaBot.Server.UnitTest.App.Infrastructure
 {
+    // ToDo: more like an integration test, move to a different project
     [TestClass]
     public class DolarSiProviderTests
     {
@@ -21,7 +22,7 @@ namespace D0lenaBot.Server.UnitTest.App.Infrastructure
 
             mockLoader.Setup(m => m.Load(It.IsAny<string>()))
                       .ReturnsAsync(doc);
-            var target = new DolarSiProvider(mockLoader.Object);
+            var target = new DolarSiProvider(mockLoader.Object, new DolarSiValuesParser());
 
             // Act
             var result = await target.GetCurrentExchangeRate();
@@ -30,7 +31,7 @@ namespace D0lenaBot.Server.UnitTest.App.Infrastructure
             Assert.AreEqual(result.Rate.Buy, 194.50m);
             Assert.AreEqual(result.Rate.Sell, 197.50m);
             Assert.AreEqual(result.Provider, ExchangeProvider.DolarSi);
-            Assert.AreEqual(result.DateUTC, new DateTime(2021, 10, 29, 0, 0, 0, DateTimeKind.Utc));
+            Assert.AreEqual(result.ExchangeDateUTC, new DateTime(2021, 10, 29, 0, 0, 0, DateTimeKind.Utc));
         }
 
         private static HtmlDocument CreateMockHtmlDocument()
