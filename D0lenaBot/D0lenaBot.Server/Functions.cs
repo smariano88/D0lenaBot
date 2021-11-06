@@ -1,29 +1,26 @@
-using D0lenaBot.Server.App.Application.FetchDollarCommand;
+using D0lenaBot.Server.App.Application.FetchDolarSiExchangeRateCommand;
 using D0lenaBot.Server.App.Application.NotifyExchangeRateCommand;
-using Microsoft.Azure.WebJobs;
-using Microsoft.Extensions.Logging;
-using System;
-using Microsoft.Azure.WebJobs.Extensions.Http;
-using System.Threading.Tasks;
-using System.IO;
-using Newtonsoft.Json;
-using Microsoft.AspNetCore.Http;
-using System.Net.Http;
-using System.Linq;
-using System.Net;
-using Microsoft.AspNetCore.Mvc;
 using D0lenaBot.Server.App.Application.RegisterUserCommand;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.Azure.WebJobs;
+using Microsoft.Azure.WebJobs.Extensions.Http;
+using Microsoft.Extensions.Logging;
+using Newtonsoft.Json;
+using System;
+using System.IO;
+using System.Threading.Tasks;
 
 namespace D0lenaBot.Server
 {
     public class FetchDollarExchangeRates
     {
-        private readonly IFetchDollarCommand fetchDollarCommand;
+        private readonly IFetchDolarSiExchangeRateCommand fetchDollarCommand;
         private readonly INotifyExchangeRateCommand notifyExchangeRateCommand;
         private readonly IRegisterUserCommand registerUserCommand;
 
         public FetchDollarExchangeRates(
-            IFetchDollarCommand fetchDollarCommand,
+            IFetchDolarSiExchangeRateCommand fetchDollarCommand,
             INotifyExchangeRateCommand notifyExchangeRateCommand,
             IRegisterUserCommand registerUserCommand)
         {
@@ -32,12 +29,12 @@ namespace D0lenaBot.Server
             this.registerUserCommand = registerUserCommand;
         }
 
-        [FunctionName("FetchDollarExchangeRate")]
-        public async Task Run([TimerTrigger("0 30 13 * * *")] TimerInfo myTimer, ILogger logger)
+        [FunctionName("FetchDolarSiTodaysExchangeRate")]
+        public async Task Run([TimerTrigger("0 30 14 * * *")] TimerInfo myTimer, ILogger logger)
         {
             try
             {
-                await this.fetchDollarCommand.Fetch(DateTime.UtcNow);
+                await this.fetchDollarCommand.FetchTodaysExchangeRate();
                 await this.notifyExchangeRateCommand.Send(DateTime.UtcNow);
             }
             catch (Exception ex)
@@ -56,12 +53,20 @@ namespace D0lenaBot.Server
                 requestBody = await streamReader.ReadToEndAsync();
             }
             dynamic data = JsonConvert.DeserializeObject(requestBody);
-            string textMessage = data.message.text.ToString();
+            string textMessage = data?.message?.text?.ToString();
 
-            if (textMessage == "/start")
+            if (string.IsNullOrEmpty(textMessage))
+            {
+                log.LogError("Body: " + requestBody);
+            }
+            else if (textMessage == "/start")
             {
                 string chatId = data.message.chat.id.ToString();
                 await this.registerUserCommand.Register(chatId);
+            }
+            else
+            {
+                log.LogError("Body: " + requestBody);
             }
 
             return (ActionResult)new OkObjectResult("ok");

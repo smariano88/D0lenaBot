@@ -35,7 +35,7 @@ namespace D0lenaBot.Server.App.Infrastructure
         {
             string newLine = "%0A";
             string header = "";// "*Cotizacion para Rosario*" + newLine;
-            string fecha = $"_Fecha coti_: {exchangeRate.DateUTC.ToString("dd/MM/yyyy")}";
+            string fecha = $"_Fecha coti_: {exchangeRate.ExchangeDateUTC.ToString("dd/MM/yyyy")}";
             string tab = "      ";
             string exchangeTemplate = "💵 *{3}* " + newLine + tab + "${0} / ${1}" + newLine + tab + "Promedio: ${2}\\.";
 
