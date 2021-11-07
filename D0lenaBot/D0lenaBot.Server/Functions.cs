@@ -30,7 +30,7 @@ namespace D0lenaBot.Server
         }
 
         [FunctionName("FetchDolarSiTodaysExchangeRate")]
-        public async Task Run([TimerTrigger("0 30 14 * * *")] TimerInfo myTimer, ILogger logger)
+        public async Task Run([TimerTrigger("0 30 14 * * 1-5")] TimerInfo myTimer, ILogger logger)
         {
             try
             {
