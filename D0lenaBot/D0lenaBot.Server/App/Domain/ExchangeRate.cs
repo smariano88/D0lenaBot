@@ -32,6 +32,7 @@ namespace D0lenaBot.Server.App.Domain
 
         public decimal Buy { get; }
         public decimal Sell { get; }
+        public decimal Average => Math.Round((this.Buy + this.Sell) / 2, 2, MidpointRounding.AwayFromZero);
     }
 
     public enum ExchangeProvider

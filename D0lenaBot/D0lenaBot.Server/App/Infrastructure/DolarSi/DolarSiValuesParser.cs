@@ -3,7 +3,7 @@ using System.Globalization;
 
 namespace D0lenaBot.Server.App.Infrastructure
 {
-    public interface IDolarSiValuesParser
+    internal interface IDolarSiValuesParser
     {
         decimal ParseRateToDecimal(string content);
         DateTime ParseDate(string content);

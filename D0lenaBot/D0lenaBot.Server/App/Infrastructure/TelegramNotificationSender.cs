@@ -1,52 +1,57 @@
 ﻿using D0lenaBot.Server.App.Application.Infrastructure;
 using D0lenaBot.Server.App.Domain;
-using System.Net.Http;
+using D0lenaBot.Server.App.Infrastructure.Telegram;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace D0lenaBot.Server.App.Infrastructure
 {
     // ToDo: 
-    // Apply SRP
     // Create unit test
-    internal class TelegramNotificationSender : INotificationSender
+    internal class TelegramNotificationSender : IExchangeRateMessageSender
     {
-        public const string baseUrl = "https://api.telegram.org/bot";
-        public readonly string telegramToken;
-        public const string path = "/sendMessage?";
-        private const string textParamName = "text=";
-        private const string chatIdParamName = "chat_id=";
-        private const string parse_mode = "parse_mode=MarkdownV2";
-        public TelegramNotificationSender(IEnvironmentVariablesProvider environmentVariablesProvider)
+        private const string PATH = "/sendMessage";
+        private const string PARAM_NAME_TEXT = "text";
+        private const string PARAM_NAME_CHAT_ID = "chat_id";
+        private const string PARAM_NAME_PARSE_MODE = "parse_mode";
+        private const string PARAM_VALUE_PARSE_MODE = "MarkdownV2";
+
+        private readonly ITelegramMessageSender telegramMessageSender;
+        private readonly ITelegramMessageBuilder telegramMessageBuilder;
+
+        public TelegramNotificationSender(ITelegramMessageSender telegramMessageSender, ITelegramMessageBuilder telegramMessageBuilder)
         {
-            this.telegramToken = environmentVariablesProvider.GetTelegramToken();
+            this.telegramMessageSender = telegramMessageSender;
+            this.telegramMessageBuilder = telegramMessageBuilder;
         }
-        public async Task Send(ExchangeRate exchangeRate, string chatId)
+        public async Task SendExchangeRate(ExchangeRate exchangeRate, string chatId)
         {
-            string chatIdParameter = chatIdParamName + chatId;
-            string textParameter = textParamName + this.GetText(exchangeRate);
+            var text = this.GetText(exchangeRate);
 
-            string finalUrl = baseUrl + telegramToken + path + $"{parse_mode}&{chatIdParameter}&{textParameter}";
+            var args = new Dictionary<string, string>();
+            args.Add(PARAM_NAME_TEXT, text);
+            args.Add(PARAM_NAME_CHAT_ID, chatId);
+            args.Add(PARAM_NAME_PARSE_MODE, PARAM_VALUE_PARSE_MODE);
 
-            HttpClient req = new HttpClient();
-            await req.GetAsync(finalUrl);
+            await this.telegramMessageSender.SendMessage(PATH, args);
         }
 
         private string GetText(ExchangeRate exchangeRate)
         {
-            string newLine = "%0A";
-            string header = "";// "*Cotizacion para Rosario*" + newLine;
-            string fecha = $"_Fecha coti_: {exchangeRate.ExchangeDateUTC.ToString("dd/MM/yyyy")}";
-            string tab = "      ";
-            string exchangeTemplate = "💵 *{3}* " + newLine + tab + "${0} / ${1}" + newLine + tab + "Promedio: ${2}\\.";
+            string exchangeRateText = string.Format("${0} / ${1}\\. ", exchangeRate.Rate.Buy.ToString(), exchangeRate.Rate.Sell.ToString());
+            string average = string.Format(" Promedio: ${0}", exchangeRate.Rate.Average);
 
-            var average = (exchangeRate.Rate.Buy + exchangeRate.Rate.Sell) / 2;
+            var messageBuilder = this.telegramMessageBuilder
+                                     .AddItalicText("Fecha: ").AddText(exchangeRate.ExchangeDateUTC.ToString("dd/MM/yyyy"))
+                                     .AddNewLine().AddNewLine().AddText("💵 ").AddText(exchangeRate.ProviderDescription)
+                                     .AddNewLine().AddBoldText(exchangeRateText).AddText(average);
 
-            var rate1 = string.Format(exchangeTemplate, cleanup(exchangeRate.Rate.Buy), cleanup(exchangeRate.Rate.Sell), cleanup(average), exchangeRate.ProviderDescription);
-            return header + fecha + newLine + rate1 + newLine;
-        }
-        private string cleanup(decimal value)
-        {
-            return value.ToString().Replace(".", ",");
+            /*var messageBuilder = this.telegramMessageBuilder
+                                     .AddText("💵 ").AddBoldText(exchangeRate.ProviderDescription)
+                                     .AddNewLine().AddItalicText("Fecha coti: ").AddText(exchangeRate.ExchangeDateUTC.ToString("dd/MM/yyyy"))
+                                     .AddNewLine().AddText(exchangeRateText).AddText(average);*/
+
+            return messageBuilder.ToString();
         }
     }
 }

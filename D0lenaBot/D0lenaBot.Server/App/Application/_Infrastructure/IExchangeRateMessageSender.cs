@@ -3,8 +3,8 @@ using System.Threading.Tasks;
 
 namespace D0lenaBot.Server.App.Application.Infrastructure
 {
-    public interface INotificationSender
+    public interface IExchangeRateMessageSender
     {
-        Task Send(ExchangeRate exchangeRate, string chatId);
+        Task SendExchangeRate(ExchangeRate exchangeRate, string chatId);
     }
 }

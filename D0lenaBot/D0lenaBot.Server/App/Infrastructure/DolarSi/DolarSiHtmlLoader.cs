@@ -3,7 +3,7 @@ using System.Threading.Tasks;
 
 namespace D0lenaBot.Server.App.Infrastructure
 {
-    public interface IDolarSiHtmlLoader
+    internal interface IDolarSiHtmlLoader
     {
         Task<HtmlDocument> Load(string url);
     }

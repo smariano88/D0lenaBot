@@ -12,8 +12,8 @@ namespace D0lenaBot.Server.App.Application.NotifyExchangeRateCommand
     {
         private readonly IExchangeRates exchangeRates;
         private readonly IUsers users;
-        private readonly INotificationSender notificationSender;
-        public NotifyExchangeRateCommand(IExchangeRates exchangeRates, IUsers users, INotificationSender notificationSender)
+        private readonly IExchangeRateMessageSender notificationSender;
+        public NotifyExchangeRateCommand(IExchangeRates exchangeRates, IUsers users, IExchangeRateMessageSender notificationSender)
         {
             this.exchangeRates = exchangeRates;
             this.users = users;
@@ -27,7 +27,7 @@ namespace D0lenaBot.Server.App.Application.NotifyExchangeRateCommand
 
             foreach (var chatId in chatIds)
             {
-                await this.notificationSender.Send(exchangeRate, chatId);
+                await this.notificationSender.SendExchangeRate(exchangeRate, chatId);
             }
         }
     }
