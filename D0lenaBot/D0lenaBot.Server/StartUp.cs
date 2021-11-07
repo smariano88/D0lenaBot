@@ -2,6 +2,7 @@
 using D0lenaBot.Server.App.Application.Infrastructure;
 using D0lenaBot.Server.App.Application.NotifyExchangeRateCommand;
 using D0lenaBot.Server.App.Application.RegisterUserCommand;
+using D0lenaBot.Server.App.Application.SendWelcomeMessageCommand;
 using D0lenaBot.Server.App.Infrastructure;
 using D0lenaBot.Server.App.Infrastructure.DolarSi;
 using D0lenaBot.Server.App.Infrastructure.DolarSi.Services;
@@ -22,6 +23,7 @@ namespace D0lenaBot.Server
             builder.Services.AddScoped<IFetchDolarSiExchangeRateCommand, FetchDolarSiExchangeRateCommand>();
             builder.Services.AddScoped<INotifyExchangeRateCommand, NotifyExchangeRateCommand>();
             builder.Services.AddScoped<IRegisterUserCommand, RegisterUserCommand>();
+            builder.Services.AddScoped<ISendWelcomeMessageCommand, SendWelcomeMessageCommand>();
 
             // Repositories
             builder.Services.AddScoped<IExchangeRates, ExchangeRatesRepository>();
@@ -33,9 +35,10 @@ namespace D0lenaBot.Server
             builder.Services.AddScoped<IDolarSiValuesParser, DolarSiValuesParser>();
 
             // Telegram
+            builder.Services.AddScoped<IWelcomeMessageSender, TelegramWelcomeMessageSender>();
             builder.Services.AddScoped<IExchangeRateMessageSender, TelegramExchangeRateMessageSender>();
-            builder.Services.AddScoped<ITelegramMessageSender, TelegramMessageSender>();
             builder.Services.AddScoped<ITelegramMessageBuilder, TelegramMessageBuilder>();
+            builder.Services.AddScoped<ITelegramMessageSender, TelegramMessageSender>();
 
             // Misc
             builder.Services.AddSingleton<IEnvironmentVariablesProvider, EnvironmentVariablesProvider>();

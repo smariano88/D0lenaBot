@@ -1,6 +1,7 @@
 using D0lenaBot.Server.App.Application.FetchDolarSiExchangeRateCommand;
 using D0lenaBot.Server.App.Application.NotifyExchangeRateCommand;
 using D0lenaBot.Server.App.Application.RegisterUserCommand;
+using D0lenaBot.Server.App.Application.SendWelcomeMessageCommand;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Azure.WebJobs;
@@ -18,15 +19,18 @@ namespace D0lenaBot.Server
         private readonly IFetchDolarSiExchangeRateCommand fetchDollarCommand;
         private readonly INotifyExchangeRateCommand notifyExchangeRateCommand;
         private readonly IRegisterUserCommand registerUserCommand;
+        private readonly ISendWelcomeMessageCommand sendWelcomeMessageCommand;
 
         public FetchDollarExchangeRates(
             IFetchDolarSiExchangeRateCommand fetchDollarCommand,
             INotifyExchangeRateCommand notifyExchangeRateCommand,
-            IRegisterUserCommand registerUserCommand)
+            IRegisterUserCommand registerUserCommand,
+            ISendWelcomeMessageCommand sendWelcomeMessageCommand)
         {
             this.fetchDollarCommand = fetchDollarCommand;
             this.notifyExchangeRateCommand = notifyExchangeRateCommand;
             this.registerUserCommand = registerUserCommand;
+            this.sendWelcomeMessageCommand = sendWelcomeMessageCommand;
         }
 
         [FunctionName("FetchDolarSiTodaysExchangeRate")]
@@ -52,21 +56,47 @@ namespace D0lenaBot.Server
             {
                 requestBody = await streamReader.ReadToEndAsync();
             }
+
             dynamic data = JsonConvert.DeserializeObject(requestBody);
             string textMessage = data?.message?.text?.ToString();
 
             if (string.IsNullOrEmpty(textMessage))
             {
                 log.LogError("Body: " + requestBody);
+                return (ActionResult)new OkObjectResult("ok");
             }
-            else if (textMessage == "/start")
+
+            switch (textMessage)
             {
-                string chatId = data.message.chat.id.ToString();
-                await this.registerUserCommand.Register(chatId);
-            }
-            else
-            {
-                log.LogError("Body: " + requestBody);
+                case "/start":
+                    {
+                        string chatId = data.message.chat.id.ToString();
+                        await this.sendWelcomeMessageCommand.Send(chatId);
+                        break;
+                    }
+                case "/suscribe":
+                    {
+                        string chatId = data.message.chat.id.ToString();
+                        await this.registerUserCommand.Register(chatId);
+                        break;
+                    }
+                case "/stop":
+                    {
+                        //string chatId = data.message.chat.id.ToString();
+                        //await this.registerUserCommand.Register(chatId);
+                        break;
+                    }
+                case "/diaria":
+                    {
+                        //string chatId = data.message.chat.id.ToString();
+                        //await this.registerUserCommand.Register(chatId);
+                        break;
+                    }
+                default:
+                    {
+                        log.LogError("Body: " + requestBody);
+                        break;
+                    }
             }
 
             return (ActionResult)new OkObjectResult("ok");
