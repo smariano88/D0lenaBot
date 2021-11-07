@@ -7,7 +7,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Content Include="App\Infrastructure\MockHtml.html">
+    <Content Include="App\Infrastructure\DolarSi\MockHtml.html">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
   </ItemGroup>

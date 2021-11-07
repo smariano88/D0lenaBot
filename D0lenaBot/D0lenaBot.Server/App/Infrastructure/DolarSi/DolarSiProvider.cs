@@ -1,11 +1,12 @@
 ﻿using D0lenaBot.Server.App.Application.Infrastructure;
 using D0lenaBot.Server.App.Domain;
+using D0lenaBot.Server.App.Infrastructure.DolarSi.Services;
 using HtmlAgilityPack;
 using System;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace D0lenaBot.Server.App.Infrastructure
+namespace D0lenaBot.Server.App.Infrastructure.DolarSi
 {
     internal class DolarSiProvider : IDolarSiProvider
     {

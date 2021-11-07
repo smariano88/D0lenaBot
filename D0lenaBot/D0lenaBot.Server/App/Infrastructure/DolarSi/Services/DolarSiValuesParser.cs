@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Globalization;
 
-namespace D0lenaBot.Server.App.Infrastructure
+namespace D0lenaBot.Server.App.Infrastructure.DolarSi.Services
 {
     internal interface IDolarSiValuesParser
     {

@@ -1,14 +1,14 @@
 ﻿using D0lenaBot.Server.App.Application.Infrastructure;
 using D0lenaBot.Server.App.Domain;
-using D0lenaBot.Server.App.Infrastructure.Telegram;
+using D0lenaBot.Server.App.Infrastructure.Telegram.Services;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace D0lenaBot.Server.App.Infrastructure
+namespace D0lenaBot.Server.App.Infrastructure.Telegram
 {
     // ToDo: 
     // Create unit test
-    internal class TelegramNotificationSender : IExchangeRateMessageSender
+    internal class TelegramExchangeRateMessageSender : IExchangeRateMessageSender
     {
         private const string PATH = "/sendMessage";
         private const string PARAM_NAME_TEXT = "text";
@@ -19,7 +19,7 @@ namespace D0lenaBot.Server.App.Infrastructure
         private readonly ITelegramMessageSender telegramMessageSender;
         private readonly ITelegramMessageBuilder telegramMessageBuilder;
 
-        public TelegramNotificationSender(ITelegramMessageSender telegramMessageSender, ITelegramMessageBuilder telegramMessageBuilder)
+        public TelegramExchangeRateMessageSender(ITelegramMessageSender telegramMessageSender, ITelegramMessageBuilder telegramMessageBuilder)
         {
             this.telegramMessageSender = telegramMessageSender;
             this.telegramMessageBuilder = telegramMessageBuilder;

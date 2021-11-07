@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Net.Http;
 using System.Threading.Tasks;
 
-namespace D0lenaBot.Server.App.Infrastructure.Telegram
+namespace D0lenaBot.Server.App.Infrastructure.Telegram.Services
 {
     // ToDo: improve use of httpclient
     internal interface ITelegramMessageSender

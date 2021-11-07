@@ -1,8 +1,8 @@
-﻿using D0lenaBot.Server.App.Infrastructure;
+﻿using D0lenaBot.Server.App.Infrastructure.DolarSi.Services;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 
-namespace D0lenaBot.Server.UnitTest.App.Infrastructure.DolarSi
+namespace D0lenaBot.Server.UnitTest.App.Infrastructure.DolarSi.Services
 {
     [TestClass]
     public class DolarSiValuesParserTests

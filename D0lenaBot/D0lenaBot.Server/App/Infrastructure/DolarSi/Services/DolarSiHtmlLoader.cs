@@ -1,7 +1,7 @@
 ﻿using HtmlAgilityPack;
 using System.Threading.Tasks;
 
-namespace D0lenaBot.Server.App.Infrastructure
+namespace D0lenaBot.Server.App.Infrastructure.DolarSi.Services
 {
     internal interface IDolarSiHtmlLoader
     {

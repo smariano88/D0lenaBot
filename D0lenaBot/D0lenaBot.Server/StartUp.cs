@@ -3,7 +3,10 @@ using D0lenaBot.Server.App.Application.Infrastructure;
 using D0lenaBot.Server.App.Application.NotifyExchangeRateCommand;
 using D0lenaBot.Server.App.Application.RegisterUserCommand;
 using D0lenaBot.Server.App.Infrastructure;
+using D0lenaBot.Server.App.Infrastructure.DolarSi;
+using D0lenaBot.Server.App.Infrastructure.DolarSi.Services;
 using D0lenaBot.Server.App.Infrastructure.Telegram;
+using D0lenaBot.Server.App.Infrastructure.Telegram.Services;
 using Microsoft.Azure.Functions.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -30,7 +33,7 @@ namespace D0lenaBot.Server
             builder.Services.AddScoped<IDolarSiValuesParser, DolarSiValuesParser>();
 
             // Telegram
-            builder.Services.AddScoped<IExchangeRateMessageSender, TelegramNotificationSender>();
+            builder.Services.AddScoped<IExchangeRateMessageSender, TelegramExchangeRateMessageSender>();
             builder.Services.AddScoped<ITelegramMessageSender, TelegramMessageSender>();
             builder.Services.AddScoped<ITelegramMessageBuilder, TelegramMessageBuilder>();
 

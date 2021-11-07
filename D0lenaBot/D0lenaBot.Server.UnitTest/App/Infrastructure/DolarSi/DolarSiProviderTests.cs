@@ -1,5 +1,6 @@
 ﻿using D0lenaBot.Server.App.Domain;
-using D0lenaBot.Server.App.Infrastructure;
+using D0lenaBot.Server.App.Infrastructure.DolarSi;
+using D0lenaBot.Server.App.Infrastructure.DolarSi.Services;
 using HtmlAgilityPack;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
@@ -7,7 +8,7 @@ using System;
 using System.IO;
 using System.Threading.Tasks;
 
-namespace D0lenaBot.Server.UnitTest.App.Infrastructure
+namespace D0lenaBot.Server.UnitTest.App.Infrastructure.DolarSi
 {
     // ToDo: more like an integration test, move to a different project
     [TestClass]
@@ -37,7 +38,7 @@ namespace D0lenaBot.Server.UnitTest.App.Infrastructure
         private static HtmlDocument CreateMockHtmlDocument()
         {
             var directory = Directory.GetCurrentDirectory();
-            var path = Path.Combine(directory, "App", "Infrastructure", "MockHtml.html");
+            var path = Path.Combine(directory, "App", "Infrastructure", "DolarSi", "MockHtml.html");
 
             var doc = new HtmlDocument();
             doc.Load(path);

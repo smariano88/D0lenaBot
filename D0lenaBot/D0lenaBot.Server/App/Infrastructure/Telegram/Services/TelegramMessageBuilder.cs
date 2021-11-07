@@ -1,6 +1,6 @@
 ﻿using System.Text;
 
-namespace D0lenaBot.Server.App.Infrastructure.Telegram
+namespace D0lenaBot.Server.App.Infrastructure.Telegram.Services
 {
     internal interface ITelegramMessageBuilder
     {
