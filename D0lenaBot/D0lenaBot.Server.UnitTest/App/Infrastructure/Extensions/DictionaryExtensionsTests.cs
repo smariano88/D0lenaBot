@@ -19,7 +19,7 @@ namespace D0lenaBot.Server.UnitTest.App.Infrastructure.Extensions
             var result = values.ToQueryStringArgs();
 
             // Assert
-            var expectedResult = "id=123&text=This is a message with &lt;html&gt; code";
+            var expectedResult = "id=123&text=This is a message with <html> code";
             Assert.AreEqual(expectedResult, result);
         }
     }
