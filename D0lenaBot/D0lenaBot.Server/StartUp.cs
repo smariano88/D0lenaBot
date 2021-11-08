@@ -37,6 +37,7 @@ namespace D0lenaBot.Server
             // Telegram
             builder.Services.AddScoped<IWelcomeMessageSender, TelegramWelcomeMessageSender>();
             builder.Services.AddScoped<IExchangeRateMessageSender, TelegramExchangeRateMessageSender>();
+            builder.Services.AddScoped<IUserRegisteredMessageSender, TelegramUserRegisteredMessageSender>();
             builder.Services.AddScoped<ITelegramMessageBuilder, TelegramMessageBuilder>();
             builder.Services.AddScoped<ITelegramMessageSender, TelegramMessageSender>();
 

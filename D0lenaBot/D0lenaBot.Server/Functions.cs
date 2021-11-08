@@ -77,8 +77,10 @@ namespace D0lenaBot.Server
                 case "/subscribe":
                     {
                         string chatId = data.message.chat.id.ToString();
+                        string firstName = data.message.chat.first_name.ToString();
+                        string lastName = data.message.chat.last_name.ToString();
                         // string chatId = data.message.chat.id.ToString();
-                        await this.registerUserCommand.Register(chatId);
+                        await this.registerUserCommand.Register(chatId, firstName, lastName);
                         break;
                     }
                 case "/stop":

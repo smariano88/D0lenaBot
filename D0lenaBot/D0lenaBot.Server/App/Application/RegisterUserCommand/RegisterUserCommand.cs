@@ -1,6 +1,5 @@
 ﻿using D0lenaBot.Server.App.Application.Infrastructure;
 using D0lenaBot.Server.App.Domain;
-using System;
 using System.Threading.Tasks;
 
 namespace D0lenaBot.Server.App.Application.RegisterUserCommand
@@ -10,12 +9,16 @@ namespace D0lenaBot.Server.App.Application.RegisterUserCommand
     internal class RegisterUserCommand : IRegisterUserCommand
     {
         private readonly IUsers users;
-        public RegisterUserCommand(IUsers users)
+        private readonly IUserRegisteredMessageSender userRegisteredMessageSender;
+
+        public RegisterUserCommand(IUsers users, IUserRegisteredMessageSender userRegisteredMessageSender)
         {
             this.users = users;
+            this.userRegisteredMessageSender = userRegisteredMessageSender;
         }
 
-        public async Task Register(string chatId)
+        public async Task Register(string chatId, string firstName, string lastName)
+
         {
             var user = await this.users.GetByChatId(chatId);
             if (user != null)
@@ -25,8 +28,12 @@ namespace D0lenaBot.Server.App.Application.RegisterUserCommand
 
             await this.users.Save(new User()
             {
-                ChatId = chatId
+                ChatId = chatId,
+                FirstName = firstName, 
+                LastName = lastName
             });
+
+            await this.userRegisteredMessageSender.Send(chatId);
         }
     }
 }

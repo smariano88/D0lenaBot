@@ -17,5 +17,7 @@ namespace D0lenaBot.Server.App.Domain
 
         public string PartitionKey => "PartitionKey";
         public string ChatId { get; set; }
+        public string FirstName { get; set; }
+        public string LastName { get; set; }
     }
 }
