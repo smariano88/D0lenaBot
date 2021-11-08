@@ -1,5 +1,5 @@
 using D0lenaBot.Server.App.Application.FetchDolarSiExchangeRateCommand;
-using D0lenaBot.Server.App.Application.NotifyExchangeRateCommand;
+using D0lenaBot.Server.App.Application.NotifyAllExchangeRateCommand;
 using D0lenaBot.Server.App.Application.RegisterUserCommand;
 using D0lenaBot.Server.App.Application.SendWelcomeMessageCommand;
 using Microsoft.AspNetCore.Http;
@@ -17,13 +17,13 @@ namespace D0lenaBot.Server
     public class FetchDollarExchangeRates
     {
         private readonly IFetchDolarSiExchangeRateCommand fetchDollarCommand;
-        private readonly INotifyExchangeRateCommand notifyExchangeRateCommand;
+        private readonly INotifyAllExchangeRateCommand notifyExchangeRateCommand;
         private readonly IRegisterUserCommand registerUserCommand;
         private readonly ISendWelcomeMessageCommand sendWelcomeMessageCommand;
 
         public FetchDollarExchangeRates(
             IFetchDolarSiExchangeRateCommand fetchDollarCommand,
-            INotifyExchangeRateCommand notifyExchangeRateCommand,
+            INotifyAllExchangeRateCommand notifyExchangeRateCommand,
             IRegisterUserCommand registerUserCommand,
             ISendWelcomeMessageCommand sendWelcomeMessageCommand)
         {
@@ -77,6 +77,7 @@ namespace D0lenaBot.Server
                 case "/subscribe":
                     {
                         string chatId = data.message.chat.id.ToString();
+                        // string chatId = data.message.chat.id.ToString();
                         await this.registerUserCommand.Register(chatId);
                         break;
                     }

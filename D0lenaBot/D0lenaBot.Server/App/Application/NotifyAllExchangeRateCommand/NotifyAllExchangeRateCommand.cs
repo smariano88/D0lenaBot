@@ -4,16 +4,16 @@ using System;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace D0lenaBot.Server.App.Application.NotifyExchangeRateCommand
+namespace D0lenaBot.Server.App.Application.NotifyAllExchangeRateCommand
 {
     // ToDo: 
     // * Notifications should be in a queue, so we have retries for free, among other benefits
-    internal class NotifyExchangeRateCommand : INotifyExchangeRateCommand
+    internal class NotifyAllExchangeRateCommand : INotifyAllExchangeRateCommand
     {
         private readonly IExchangeRates exchangeRates;
         private readonly IUsers users;
         private readonly IExchangeRateMessageSender notificationSender;
-        public NotifyExchangeRateCommand(IExchangeRates exchangeRates, IUsers users, IExchangeRateMessageSender notificationSender)
+        public NotifyAllExchangeRateCommand(IExchangeRates exchangeRates, IUsers users, IExchangeRateMessageSender notificationSender)
         {
             this.exchangeRates = exchangeRates;
             this.users = users;
@@ -22,7 +22,7 @@ namespace D0lenaBot.Server.App.Application.NotifyExchangeRateCommand
 
         public async Task Send(DateTime date)
         {
-            ExchangeRate exchangeRate = await this.exchangeRates.Get(date);
+            ExchangeRate exchangeRate = await this.exchangeRates.GetLatest();
             var chatIds = (await this.users.GetAll()).Select(u => u.ChatId);
 
             foreach (var chatId in chatIds)

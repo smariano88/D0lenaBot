@@ -1,6 +1,6 @@
 ﻿using D0lenaBot.Server.App.Application.FetchDolarSiExchangeRateCommand;
 using D0lenaBot.Server.App.Application.Infrastructure;
-using D0lenaBot.Server.App.Application.NotifyExchangeRateCommand;
+using D0lenaBot.Server.App.Application.NotifyAllExchangeRateCommand;
 using D0lenaBot.Server.App.Application.RegisterUserCommand;
 using D0lenaBot.Server.App.Application.SendWelcomeMessageCommand;
 using D0lenaBot.Server.App.Infrastructure;
@@ -21,7 +21,7 @@ namespace D0lenaBot.Server
         {
             // Commands and queries
             builder.Services.AddScoped<IFetchDolarSiExchangeRateCommand, FetchDolarSiExchangeRateCommand>();
-            builder.Services.AddScoped<INotifyExchangeRateCommand, NotifyExchangeRateCommand>();
+            builder.Services.AddScoped<INotifyAllExchangeRateCommand, NotifyAllExchangeRateCommand>();
             builder.Services.AddScoped<IRegisterUserCommand, RegisterUserCommand>();
             builder.Services.AddScoped<ISendWelcomeMessageCommand, SendWelcomeMessageCommand>();
 

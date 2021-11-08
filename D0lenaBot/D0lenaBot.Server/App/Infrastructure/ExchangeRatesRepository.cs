@@ -69,7 +69,7 @@ namespace D0lenaBot.Server.App.Infrastructure
             Console.WriteLine("Created Container: {0}\n", this.container.Id);
         }
 
-        public async Task<ExchangeRate> Get(DateTime date)
+        public async Task<ExchangeRate> GetLatest()
         {
             await this.CreateDatabaseAsync();
             await this.CreateContainerAsync();

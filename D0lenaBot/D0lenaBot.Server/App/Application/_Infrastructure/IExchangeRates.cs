@@ -7,6 +7,6 @@ namespace D0lenaBot.Server.App.Application.Infrastructure
     public interface IExchangeRates
     {
         Task Save(ExchangeRate exchangeRate);
-        Task<ExchangeRate> Get(DateTime date);
+        Task<ExchangeRate> GetLatest();
     }
 }
