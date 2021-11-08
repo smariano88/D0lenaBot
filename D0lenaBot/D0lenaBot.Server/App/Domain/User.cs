@@ -14,6 +14,7 @@ namespace D0lenaBot.Server.App.Domain
         [JsonProperty(PropertyName = "id")]
         public string Id { get; set; }
 
+        public const string CityPropertyName = "City";
         public string City => "Rosario";
         
         public string FirstName { get; set; }

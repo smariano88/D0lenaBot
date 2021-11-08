@@ -3,8 +3,6 @@ using D0lenaBot.Server.App.Domain;
 using Microsoft.Azure.Cosmos;
 using System;
 using System.Collections.Generic;
-using System.Data.SqlTypes;
-using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
 
@@ -77,7 +75,7 @@ namespace D0lenaBot.Server.App.Infrastructure
             try
             {
                 // where c.CreatedDateUTC <= '{date.ToString("yyyy-MM-ddThh:mm:ss.fffZ")}'
-                var sqlQueryText = $"SELECT * FROM c order by c.CreatedDateUTC desc OFFSET 0 LIMIT 1";
+                var sqlQueryText = $"SELECT * FROM c order by c.ExchangeDateUTC desc OFFSET 0 LIMIT 1";
 
                 Console.WriteLine("Running query: {0}\n", sqlQueryText);
 

@@ -5,6 +5,6 @@ namespace D0lenaBot.Server.App.Application.NotifyAllExchangeRateCommand
 {
     public interface INotifyAllExchangeRateCommand
     {
-        Task Send(DateTime date);
+        Task Send();
     }
 }

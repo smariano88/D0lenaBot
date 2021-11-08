@@ -1,6 +1,5 @@
 ﻿using D0lenaBot.Server.App.Application.Infrastructure;
 using D0lenaBot.Server.App.Domain;
-using System;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -20,7 +19,7 @@ namespace D0lenaBot.Server.App.Application.NotifyAllExchangeRateCommand
             this.notificationSender = notificationSender;
         }
 
-        public async Task Send(DateTime date)   
+        public async Task Send()   
         {
             ExchangeRate exchangeRate = await this.exchangeRates.GetLatest();
             var chatIds = (await this.users.GetAll()).Select(u => u.Id);

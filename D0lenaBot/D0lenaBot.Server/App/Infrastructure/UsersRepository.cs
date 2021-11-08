@@ -18,7 +18,7 @@ namespace D0lenaBot.Server.App.Infrastructure
         private CosmosClient cosmosClient;
         private Database database;
         private Container container;
-        private const string PartitionKey = "/City";
+        private const string PartitionKey = "/" + Domain.User.CityPropertyName;
 
         private readonly string databaseId;
         private readonly string containerId;
