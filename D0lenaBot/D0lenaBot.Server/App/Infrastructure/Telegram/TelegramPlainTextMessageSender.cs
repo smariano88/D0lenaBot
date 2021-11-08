@@ -7,7 +7,7 @@ namespace D0lenaBot.Server.App.Infrastructure.Telegram
 {
     // ToDo: 
     // Create unit test
-    internal class TelegramUserRegisteredMessageSender : IUserRegisteredMessageSender
+    internal class TelegramPlainTextMessageSender : IPlainTextMessageSender
     {
         private const string PATH = "/sendMessage";
         private const string PARAM_NAME_TEXT = "text";
@@ -18,14 +18,14 @@ namespace D0lenaBot.Server.App.Infrastructure.Telegram
         private readonly ITelegramMessageSender telegramMessageSender;
         private readonly ITelegramMessageBuilder telegramMessageBuilder;
 
-        public TelegramUserRegisteredMessageSender(ITelegramMessageSender telegramMessageSender, ITelegramMessageBuilder telegramMessageBuilder)
+        public TelegramPlainTextMessageSender(ITelegramMessageSender telegramMessageSender, ITelegramMessageBuilder telegramMessageBuilder)
         {
             this.telegramMessageSender = telegramMessageSender;
             this.telegramMessageBuilder = telegramMessageBuilder;
         }
-        public async Task Send(string chatId)
+        public async Task Send(string message, string chatId)
         {
-            var text = this.GetText();
+            var text = this.GetText(message);
 
             var args = new Dictionary<string, string>();
             args.Add(PARAM_NAME_TEXT, text);
@@ -35,10 +35,10 @@ namespace D0lenaBot.Server.App.Infrastructure.Telegram
             await this.telegramMessageSender.SendMessage(PATH, args);
         }
 
-        private string GetText()
+        private string GetText(string message)
         {
             var messageBuilder = this.telegramMessageBuilder
-                                     .AddText("Gracias por registrarte!");
+                                     .AddText(message);
 
             return messageBuilder.ToString();
         }

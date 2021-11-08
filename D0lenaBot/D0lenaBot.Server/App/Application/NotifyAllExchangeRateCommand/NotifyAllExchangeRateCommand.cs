@@ -20,10 +20,10 @@ namespace D0lenaBot.Server.App.Application.NotifyAllExchangeRateCommand
             this.notificationSender = notificationSender;
         }
 
-        public async Task Send(DateTime date)
+        public async Task Send(DateTime date)   
         {
             ExchangeRate exchangeRate = await this.exchangeRates.GetLatest();
-            var chatIds = (await this.users.GetAll()).Select(u => u.ChatId);
+            var chatIds = (await this.users.GetAll()).Select(u => u.Id);
 
             foreach (var chatId in chatIds)
             {

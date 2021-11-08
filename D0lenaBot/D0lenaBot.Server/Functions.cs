@@ -1,6 +1,7 @@
 using D0lenaBot.Server.App.Application.FetchDolarSiExchangeRateCommand;
 using D0lenaBot.Server.App.Application.NotifyAllExchangeRateCommand;
 using D0lenaBot.Server.App.Application.RegisterUserCommand;
+using D0lenaBot.Server.App.Application.RemoveUserCommand;
 using D0lenaBot.Server.App.Application.SendWelcomeMessageCommand;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -20,17 +21,20 @@ namespace D0lenaBot.Server
         private readonly INotifyAllExchangeRateCommand notifyExchangeRateCommand;
         private readonly IRegisterUserCommand registerUserCommand;
         private readonly ISendWelcomeMessageCommand sendWelcomeMessageCommand;
+        private readonly IRemoveUserCommand removeUserCommand;
 
         public FetchDollarExchangeRates(
             IFetchDolarSiExchangeRateCommand fetchDollarCommand,
             INotifyAllExchangeRateCommand notifyExchangeRateCommand,
             IRegisterUserCommand registerUserCommand,
-            ISendWelcomeMessageCommand sendWelcomeMessageCommand)
+            ISendWelcomeMessageCommand sendWelcomeMessageCommand,
+            IRemoveUserCommand removeUserCommand)
         {
             this.fetchDollarCommand = fetchDollarCommand;
             this.notifyExchangeRateCommand = notifyExchangeRateCommand;
             this.registerUserCommand = registerUserCommand;
             this.sendWelcomeMessageCommand = sendWelcomeMessageCommand;
+            this.removeUserCommand = removeUserCommand;
         }
 
         [FunctionName("FetchDolarSiTodaysExchangeRate")]
@@ -57,15 +61,28 @@ namespace D0lenaBot.Server
                 requestBody = await streamReader.ReadToEndAsync();
             }
 
-            dynamic data = JsonConvert.DeserializeObject(requestBody);
-            string textMessage = data?.message?.text?.ToString();
+            try
+            {
+                await this.SendMessage(requestBody, log);
+            }
+            catch (Exception ex)
+            {
+                log.LogError(ex, "Unexpected error");
+            }
 
+            return (ActionResult)new OkObjectResult("ok");
+        }
+
+        private async Task SendMessage(string requestBody, ILogger log)
+        {
+            dynamic data = JsonConvert.DeserializeObject(requestBody);
+
+            string textMessage = data?.message?.text?.ToString();
             if (string.IsNullOrEmpty(textMessage))
             {
                 log.LogError("Body: " + requestBody);
-                return (ActionResult)new OkObjectResult("ok");
+                return;
             }
-
             switch (textMessage)
             {
                 case "/start":
@@ -79,14 +96,13 @@ namespace D0lenaBot.Server
                         string chatId = data.message.chat.id.ToString();
                         string firstName = data.message.chat.first_name.ToString();
                         string lastName = data.message.chat.last_name.ToString();
-                        // string chatId = data.message.chat.id.ToString();
                         await this.registerUserCommand.Register(chatId, firstName, lastName);
                         break;
                     }
                 case "/stop":
                     {
-                        //string chatId = data.message.chat.id.ToString();
-                        //await this.registerUserCommand.Register(chatId);
+                        string chatId = data.message.chat.id.ToString();
+                        await this.removeUserCommand.Remove(chatId);
                         break;
                     }
                 case "/diaria":
@@ -101,8 +117,6 @@ namespace D0lenaBot.Server
                         break;
                     }
             }
-
-            return (ActionResult)new OkObjectResult("ok");
         }
     }
 }

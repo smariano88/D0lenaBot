@@ -8,13 +8,14 @@ namespace D0lenaBot.Server.App.Application.RegisterUserCommand
     // * Add logs
     internal class RegisterUserCommand : IRegisterUserCommand
     {
+        private const string successMessage = "Te registramos correctamente!";
         private readonly IUsers users;
-        private readonly IUserRegisteredMessageSender userRegisteredMessageSender;
+        private readonly IPlainTextMessageSender plainTextMessageSender;
 
-        public RegisterUserCommand(IUsers users, IUserRegisteredMessageSender userRegisteredMessageSender)
+        public RegisterUserCommand(IUsers users, IPlainTextMessageSender plainTextMessageSender)
         {
             this.users = users;
-            this.userRegisteredMessageSender = userRegisteredMessageSender;
+            this.plainTextMessageSender = plainTextMessageSender;
         }
 
         public async Task Register(string chatId, string firstName, string lastName)
@@ -28,12 +29,12 @@ namespace D0lenaBot.Server.App.Application.RegisterUserCommand
 
             await this.users.Save(new User()
             {
-                ChatId = chatId,
+                Id = chatId,
                 FirstName = firstName, 
                 LastName = lastName
             });
 
-            await this.userRegisteredMessageSender.Send(chatId);
+            await this.plainTextMessageSender.Send(successMessage, chatId);
         }
     }
 }

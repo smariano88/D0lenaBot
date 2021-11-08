@@ -10,5 +10,6 @@ namespace D0lenaBot.Server.App.Application.Infrastructure
         Task Save(User user);
         Task<IEnumerable<User>> GetAll();
         Task<User> GetByChatId(string chatId);
+        Task Delete(User user);
     }
 }

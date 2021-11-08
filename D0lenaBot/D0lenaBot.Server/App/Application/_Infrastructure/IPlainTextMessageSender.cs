@@ -2,8 +2,8 @@
 
 namespace D0lenaBot.Server.App.Application.Infrastructure
 {
-    public interface IUserRegisteredMessageSender
+    public interface IPlainTextMessageSender
     {
-        Task Send(string chatId);
+        Task Send(string message, string chatId);
     }
 }

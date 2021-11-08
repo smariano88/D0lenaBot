@@ -1,5 +1,4 @@
 ﻿using Newtonsoft.Json;
-using System;
 
 namespace D0lenaBot.Server.App.Domain
 {
@@ -13,11 +12,12 @@ namespace D0lenaBot.Server.App.Domain
         }
 
         [JsonProperty(PropertyName = "id")]
-        public string Id { get; set; } = Guid.NewGuid().ToString();
+        public string Id { get; set; }
 
-        public string PartitionKey => "PartitionKey";
-        public string ChatId { get; set; }
+        public string City => "Rosario";
+        
         public string FirstName { get; set; }
+        
         public string LastName { get; set; }
     }
 }

@@ -1,10 +1,7 @@
 ﻿using D0lenaBot.Server.App.Application.Infrastructure;
-using D0lenaBot.Server.App.Domain;
 using Microsoft.Azure.Cosmos;
 using System;
 using System.Collections.Generic;
-using System.Data.SqlTypes;
-using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
 
@@ -21,6 +18,7 @@ namespace D0lenaBot.Server.App.Infrastructure
         private CosmosClient cosmosClient;
         private Database database;
         private Container container;
+        private const string PartitionKey = "/City";
 
         private readonly string databaseId;
         private readonly string containerId;
@@ -34,15 +32,13 @@ namespace D0lenaBot.Server.App.Infrastructure
             this.cosmosClient = new CosmosClient(endpointUrl, primaryKey);
         }
 
-
         public async Task Save(Domain.User user)
         {
-            await this.CreateDatabaseAsync();
-            await this.CreateContainerAsync();
+            await EnsureCreated();
 
             try
             {
-                ItemResponse<Domain.User> exchangeRateResponse = await this.container.CreateItemAsync<Domain.User>(user, new PartitionKey(user.PartitionKey));
+                ItemResponse<Domain.User> exchangeRateResponse = await this.container.CreateItemAsync<Domain.User>(user, new PartitionKey(user.City));
 
                 Console.WriteLine("Created item in database with id: {0} Operation consumed {1} RUs.\n", exchangeRateResponse.Resource.Id, exchangeRateResponse.RequestCharge);
             }
@@ -61,8 +57,7 @@ namespace D0lenaBot.Server.App.Infrastructure
 
         public async Task<IEnumerable<Domain.User>> GetAll()
         {
-            await this.CreateDatabaseAsync();
-            await this.CreateContainerAsync();
+            await this.EnsureCreated();
 
             try
             {
@@ -95,13 +90,11 @@ namespace D0lenaBot.Server.App.Infrastructure
 
         public async Task<Domain.User> GetByChatId(string chatId)
         {
-            await this.CreateDatabaseAsync();
-            await this.CreateContainerAsync();
+            await this.EnsureCreated();
 
             try
             {
-                // where c.CreatedDateUTC <= '{date.ToString("yyyy-MM-ddThh:mm:ss.fffZ")}'
-                var sqlQueryText = $"SELECT * FROM c WHERE c.ChatId = '{chatId}'";
+                var sqlQueryText = $"SELECT * FROM c WHERE c.id = '{chatId}'";
 
                 Console.WriteLine("Running query: {0}\n", sqlQueryText);
 
@@ -122,20 +115,41 @@ namespace D0lenaBot.Server.App.Infrastructure
 
             catch (Exception ex)
             {
-               Console.WriteLine(ex.Message);
+                Console.WriteLine(ex.Message);
                 throw ex;
             }
         }
 
-        private async Task CreateDatabaseAsync()
+        public async Task Delete(Domain.User user)
         {
-            this.database = await this.cosmosClient.CreateDatabaseIfNotExistsAsync(this.databaseId);
-            Console.WriteLine("Created Database: {0}\n", this.database.Id);
+            await EnsureCreated();
+
+            try
+            {
+                var response = await this.container.DeleteItemAsync<Domain.User>(user.Id, new PartitionKey(user.City));
+
+                Console.WriteLine("Deleted item in database with id: {0} Operation consumed {1} RUs.\n", user.Id, response.RequestCharge);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                throw ex;
+            }
+
+            Console.WriteLine("removed");
         }
 
-        private async Task CreateContainerAsync()
+        private async Task EnsureCreated()
         {
-            this.container = await this.database.CreateContainerIfNotExistsAsync(this.containerId, "/PartitionKey");
+            if (this.container != null)
+            {
+                Console.WriteLine("Databases already created");
+                return;
+            }
+            this.database = await this.cosmosClient.CreateDatabaseIfNotExistsAsync(this.databaseId);
+            Console.WriteLine("Created Database: {0}\n", this.database.Id);
+
+            this.container = await this.database.CreateContainerIfNotExistsAsync(this.containerId, PartitionKey);
             Console.WriteLine("Created Container: {0}\n", this.container.Id);
         }
     }
