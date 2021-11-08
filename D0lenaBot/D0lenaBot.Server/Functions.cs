@@ -48,7 +48,7 @@ namespace D0lenaBot.Server
             }
         }
 
-        [FunctionName("RegisterNewUser")]
+        [FunctionName("webhook")]
         public async Task<IActionResult> RunRegister([HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = null)] HttpRequest req, ILogger log)
         {
             string requestBody = String.Empty;
@@ -74,7 +74,7 @@ namespace D0lenaBot.Server
                         await this.sendWelcomeMessageCommand.Send(chatId);
                         break;
                     }
-                case "/suscribe":
+                case "/subscribe":
                     {
                         string chatId = data.message.chat.id.ToString();
                         await this.registerUserCommand.Register(chatId);

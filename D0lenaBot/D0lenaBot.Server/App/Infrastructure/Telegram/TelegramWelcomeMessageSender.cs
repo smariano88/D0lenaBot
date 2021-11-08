@@ -37,7 +37,11 @@ namespace D0lenaBot.Server.App.Infrastructure.Telegram
         private string GetText()
         {
             var messageBuilder = this.telegramMessageBuilder
-                                     .AddItalicText("Fecha: ");
+                                     .AddText("Bienvenido! Mi nombre es ").AddBoldText("D0lenaBot").AddText(" y estoy acá para ayudarte con la cotización del dólar blue en ").AddBoldText("Rosario").AddText(".").AddNewLine()
+                                     .AddNewLine().AddText("Para empezar, mandá alguno de los siguientes comandos:")
+                                     .AddNewLine().AddBulletPoint().AddText("/subscribe para empezar a recibir la cotización de lunes a viernes a las 11:30am")
+                                     .AddNewLine().AddBulletPoint().AddText("/stop para cancelar la suscripción (no implementado)")
+                                     .AddNewLine().AddBulletPoint().AddText("/coti para recibir la última cotización disponible. Útil cuando no te interesa recibir la cotización todos los días y preferís que te la mandemos cuando vos la necesitás (no implementado)");
 
             return messageBuilder.ToString();
         }

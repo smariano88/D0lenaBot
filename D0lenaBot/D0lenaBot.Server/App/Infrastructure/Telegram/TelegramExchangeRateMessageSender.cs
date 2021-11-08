@@ -38,18 +38,13 @@ namespace D0lenaBot.Server.App.Infrastructure.Telegram
 
         private string GetText(ExchangeRate exchangeRate)
         {
-            string exchangeRateText = string.Format("${0} / ${1}\\. ", exchangeRate.Rate.Buy.ToString(), exchangeRate.Rate.Sell.ToString());
+            string exchangeRateText = string.Format("${0} / ${1}. ", exchangeRate.Rate.Buy.ToString(), exchangeRate.Rate.Sell.ToString());
             string average = string.Format(" Promedio: ${0}", exchangeRate.Rate.Average);
 
             var messageBuilder = this.telegramMessageBuilder
                                      .AddItalicText("Fecha: ").AddText(exchangeRate.ExchangeDateUTC.ToString("dd/MM/yyyy"))
                                      .AddNewLine().AddNewLine().AddText("💵 ").AddText(exchangeRate.ProviderDescription)
                                      .AddNewLine().AddBoldText(exchangeRateText).AddText(average);
-
-            /*var messageBuilder = this.telegramMessageBuilder
-                                     .AddText("💵 ").AddBoldText(exchangeRate.ProviderDescription)
-                                     .AddNewLine().AddItalicText("Fecha coti: ").AddText(exchangeRate.ExchangeDateUTC.ToString("dd/MM/yyyy"))
-                                     .AddNewLine().AddText(exchangeRateText).AddText(average);*/
 
             return messageBuilder.ToString();
         }
