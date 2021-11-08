@@ -3,6 +3,7 @@ using D0lenaBot.Server.App.Domain;
 using Microsoft.Azure.Cosmos;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
 
@@ -34,8 +35,7 @@ namespace D0lenaBot.Server.App.Infrastructure
         }
         public async Task Save(ExchangeRate exchangeRate)
         {
-            await this.CreateDatabaseAsync();
-            await this.CreateContainerAsync();
+            await this.EnsureCreated();
 
             try
             {
@@ -55,50 +55,37 @@ namespace D0lenaBot.Server.App.Infrastructure
             Console.WriteLine("saved");
         }
 
-        private async Task CreateDatabaseAsync()
-        {
-            this.database = await this.cosmosClient.CreateDatabaseIfNotExistsAsync(this.databaseId);
-            Console.WriteLine("Created Database: {0}\n", this.database.Id);
-        }
-
-        private async Task CreateContainerAsync()
-        {
-            this.container = await this.database.CreateContainerIfNotExistsAsync(this.containerId, "/ProviderDescription");
-            Console.WriteLine("Created Container: {0}\n", this.container.Id);
-        }
-
         public async Task<ExchangeRate> GetLatest()
         {
-            await this.CreateDatabaseAsync();
-            await this.CreateContainerAsync();
+            await this.EnsureCreated();
 
             try
             {
-                // where c.CreatedDateUTC <= '{date.ToString("yyyy-MM-ddThh:mm:ss.fffZ")}'
-                var sqlQueryText = $"SELECT * FROM c order by c.ExchangeDateUTC desc OFFSET 0 LIMIT 1";
-
-                Console.WriteLine("Running query: {0}\n", sqlQueryText);
-
-                QueryDefinition queryDefinition = new QueryDefinition(sqlQueryText);
-                FeedIterator<ExchangeRate> queryResultSetIterator = this.container.GetItemQueryIterator<ExchangeRate>(queryDefinition);
-
-                List<ExchangeRate> families = new List<ExchangeRate>();
-
-                while (queryResultSetIterator.HasMoreResults)
-                {
-                    FeedResponse<ExchangeRate> currentResultSet = await queryResultSetIterator.ReadNextAsync();
-                    foreach (ExchangeRate family in currentResultSet)
-                    {
-                        return family;
-                    }
-                }
-                throw new Exception("No more results");
+                return this.container.GetItemLinqQueryable<Domain.ExchangeRate>(true)
+                    .OrderByDescending(u => u.ExchangeDateUTC)
+                    .AsEnumerable()
+                    .FirstOrDefault();
             }
             catch (Exception ex)
             {
                 Console.WriteLine(ex.Message);
                 throw ex;
             }
+        }
+
+        private async Task EnsureCreated()
+        {
+            if (this.container != null)
+            {
+                Console.WriteLine("Database already created");
+                return;
+            }
+
+            this.database = await this.cosmosClient.CreateDatabaseIfNotExistsAsync(this.databaseId);
+            Console.WriteLine("Created Database: {0}\n", this.database.Id);
+
+            this.container = await this.database.CreateContainerIfNotExistsAsync(this.containerId, "/ProviderDescription");
+            Console.WriteLine("Created Container: {0}\n", this.container.Id);
         }
     }
 }

@@ -2,6 +2,7 @@
 using Microsoft.Azure.Cosmos;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
 
@@ -19,6 +20,7 @@ namespace D0lenaBot.Server.App.Infrastructure
         private Database database;
         private Container container;
         private const string PartitionKey = "/" + Domain.User.CityPropertyName;
+        private const string PartitionValue = "Rosario";
 
         private readonly string databaseId;
         private readonly string containerId;
@@ -38,7 +40,7 @@ namespace D0lenaBot.Server.App.Infrastructure
 
             try
             {
-                ItemResponse<Domain.User> exchangeRateResponse = await this.container.CreateItemAsync<Domain.User>(user, new PartitionKey(user.City));
+                ItemResponse<Domain.User> exchangeRateResponse = await this.container.CreateItemAsync(user, new PartitionKey(user.City));
 
                 Console.WriteLine("Created item in database with id: {0} Operation consumed {1} RUs.\n", exchangeRateResponse.Resource.Id, exchangeRateResponse.RequestCharge);
             }
@@ -61,26 +63,29 @@ namespace D0lenaBot.Server.App.Infrastructure
 
             try
             {
-                var sqlQueryText = $"SELECT * FROM c";
+                return this.container.GetItemLinqQueryable<Domain.User>(true)
+                                     .AsEnumerable()
+                                     .ToList();
 
-                Console.WriteLine("Running query: {0}\n", sqlQueryText);
+                //var sqlQueryText = $"SELECT * FROM c";
 
-                QueryDefinition queryDefinition = new QueryDefinition(sqlQueryText);
-                FeedIterator<Domain.User> queryResultSetIterator = this.container.GetItemQueryIterator<Domain.User>(queryDefinition);
+                //Console.WriteLine("Running query: {0}\n", sqlQueryText);
 
-                List<Domain.User> users = new List<Domain.User>();
-                while (queryResultSetIterator.HasMoreResults)
-                {
-                    FeedResponse<Domain.User> currentResultSet = await queryResultSetIterator.ReadNextAsync();
-                    foreach (Domain.User family in currentResultSet)
-                    {
-                        users.Add(family);
-                    }
-                }
+                //QueryDefinition queryDefinition = new QueryDefinition(sqlQueryText);
+                //FeedIterator<Domain.User> queryResultSetIterator = this.container.GetItemQueryIterator<Domain.User>(queryDefinition);
 
-                return users;
+                //List<Domain.User> users = new List<Domain.User>();
+                //while (queryResultSetIterator.HasMoreResults)
+                //{
+                //    FeedResponse<Domain.User> currentResultSet = await queryResultSetIterator.ReadNextAsync();
+                //    foreach (Domain.User family in currentResultSet)
+                //    {
+                //        users.Add(family);
+                //    }
+                //}
+
+                //return users;
             }
-
             catch (Exception ex)
             {
                 Console.WriteLine(ex.Message);
@@ -94,25 +99,15 @@ namespace D0lenaBot.Server.App.Infrastructure
 
             try
             {
-                var sqlQueryText = $"SELECT * FROM c WHERE c.id = '{chatId}'";
+                var response = await this.container.ReadItemAsync<Domain.User>(chatId, new PartitionKey(PartitionValue));
+                Console.WriteLine("User read. Operation consumed {0} RUs.\n", response.RequestCharge);
 
-                Console.WriteLine("Running query: {0}\n", sqlQueryText);
-
-                QueryDefinition queryDefinition = new QueryDefinition(sqlQueryText);
-                FeedIterator<Domain.User> queryResultSetIterator = this.container.GetItemQueryIterator<Domain.User>(queryDefinition);
-
-                while (queryResultSetIterator.HasMoreResults)
-                {
-                    FeedResponse<Domain.User> currentResultSet = await queryResultSetIterator.ReadNextAsync();
-                    foreach (Domain.User family in currentResultSet)
-                    {
-                        return family;
-                    }
-                }
-
+                return response.Resource;
+            }
+            catch (CosmosException ex) when (ex.StatusCode == HttpStatusCode.NotFound)
+            {
                 return null;
             }
-
             catch (Exception ex)
             {
                 Console.WriteLine(ex.Message);
