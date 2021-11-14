@@ -14,7 +14,7 @@ namespace D0lenaBot.Server.App.Infrastructure.Telegram
         private const string PARAM_VALUE_PARSE_MODE = "MarkdownV2";
 
         private readonly ITelegramMessageSender telegramMessageSender;
-dw
+
         public TelegramWelcomeMessageSender(ITelegramMessageSender telegramMessageSender)
         {
             this.telegramMessageSender = telegramMessageSender;
