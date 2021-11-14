@@ -26,9 +26,11 @@
   </ItemGroup>
   <ItemGroup>
     <AssemblyAttribute Include="System.Runtime.CompilerServices.InternalsVisibleToAttribute">
-      <_Parameter1>D0lenaBot.Server.UnitTest</_Parameter1>
+      <_Parameter1>D0lenaBot.Server.Tests.Unit</_Parameter1>
     </AssemblyAttribute>
-
+    <AssemblyAttribute Include="System.Runtime.CompilerServices.InternalsVisibleToAttribute">
+      <_Parameter1>D0lenaBot.Server.Tests.Integration</_Parameter1>
+    </AssemblyAttribute>
     <AssemblyAttribute Include="System.Runtime.CompilerServices.InternalsVisibleToAttribute">
       <_Parameter1>DynamicProxyGenAssembly2</_Parameter1>
     </AssemblyAttribute>

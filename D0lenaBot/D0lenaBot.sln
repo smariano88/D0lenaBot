@@ -5,7 +5,9 @@ VisualStudioVersion = 16.0.30413.136
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "D0lenaBot.Server", "D0lenaBot.Server\D0lenaBot.Server.csproj", "{4AD9D281-956B-4107-A667-466E8405FEA6}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "D0lenaBot.Server.UnitTest", "D0lenaBot.Server.UnitTest\D0lenaBot.Server.UnitTest.csproj", "{0D7B8CC1-5A26-48DF-A228-31014380BB1E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "D0lenaBot.Server.Tests.Unit", "D0lenaBot.Server.Tests.Unit\D0lenaBot.Server.Tests.Unit.csproj", "{0D7B8CC1-5A26-48DF-A228-31014380BB1E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "D0lenaBot.Server.Tests.Integration", "D0lenaBot.Server.Tests.Integration\D0lenaBot.Server.Tests.Integration.csproj", "{946616B3-B947-4DEF-9013-CDAFCBDB6396}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,6 +23,10 @@ Global
 		{0D7B8CC1-5A26-48DF-A228-31014380BB1E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0D7B8CC1-5A26-48DF-A228-31014380BB1E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0D7B8CC1-5A26-48DF-A228-31014380BB1E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{946616B3-B947-4DEF-9013-CDAFCBDB6396}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{946616B3-B947-4DEF-9013-CDAFCBDB6396}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{946616B3-B947-4DEF-9013-CDAFCBDB6396}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{946616B3-B947-4DEF-9013-CDAFCBDB6396}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
