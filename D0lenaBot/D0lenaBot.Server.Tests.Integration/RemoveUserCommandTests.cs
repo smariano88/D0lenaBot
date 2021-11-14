@@ -47,7 +47,7 @@ namespace D0lenaBot.Server.Tests.Integration
         }
 
         [TestMethod]
-        public async Task It_sends_a_Welcome_message_to_the_user()
+        public async Task It_sends_a_Goodbye_message_to_the_user()
         {
             // Act
             await this.target.Remove("001");

@@ -1,20 +1,23 @@
 ﻿using D0lenaBot.Server.App.Application.Infrastructure;
 using D0lenaBot.Server.App.Domain;
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace D0lenaBot.Server.Tests.Integration.Mocks
 {
     public class ExchangeRateRepositoryMock : IExchangeRates
     {
-        public Task<ExchangeRate> GetLatest()
+        private List<ExchangeRate> ExchangeRates = new List<ExchangeRate>();
+        public async Task<ExchangeRate> GetLatest()
         {
-            throw new NotImplementedException();
+            return this.ExchangeRates.OrderByDescending(e => e.CreatedDateUTC).FirstOrDefault();
         }
 
-        public Task Save(ExchangeRate exchangeRate)
+        public async Task Save(ExchangeRate exchangeRate)
         {
-            throw new NotImplementedException();
+            this.ExchangeRates.Add(exchangeRate);
         }
     }
 }
