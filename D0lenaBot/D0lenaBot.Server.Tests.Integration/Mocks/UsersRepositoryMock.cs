@@ -10,9 +10,9 @@ namespace D0lenaBot.Server.Tests.Integration.Mocks
     public class UsersRepositoryMock : IUsers
     {
         private List<User> users = new List<User>();
-        public Task Delete(User user)
+        public async Task Delete(User user)
         {
-            throw new NotImplementedException();
+            this.users.Remove(user);
         }
 
         public async Task<IEnumerable<User>> GetAll()
