@@ -68,7 +68,7 @@ namespace D0lenaBot.Server.UnitTest.App.Infrastructure.Telegram.Services
         public void It_adds_a_bullet()
         {
             // Act
-            var result = this.target.AddBulletPoint().ToString();
+            var result = this.target.AddBullet().ToString();
 
             // Assert
             Assert.AreEqual("● ", result);

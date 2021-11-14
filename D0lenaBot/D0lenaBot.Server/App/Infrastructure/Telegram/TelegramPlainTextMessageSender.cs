@@ -16,12 +16,10 @@ namespace D0lenaBot.Server.App.Infrastructure.Telegram
         private const string PARAM_VALUE_PARSE_MODE = "MarkdownV2";
 
         private readonly ITelegramMessageSender telegramMessageSender;
-        private readonly ITelegramMessageBuilder telegramMessageBuilder;
 
-        public TelegramPlainTextMessageSender(ITelegramMessageSender telegramMessageSender, ITelegramMessageBuilder telegramMessageBuilder)
+        public TelegramPlainTextMessageSender(ITelegramMessageSender telegramMessageSender)
         {
             this.telegramMessageSender = telegramMessageSender;
-            this.telegramMessageBuilder = telegramMessageBuilder;
         }
         public async Task Send(string message, string chatId)
         {
@@ -37,10 +35,10 @@ namespace D0lenaBot.Server.App.Infrastructure.Telegram
 
         private string GetText(string message)
         {
-            var messageBuilder = this.telegramMessageBuilder
-                                     .AddText(message);
+            var messageBuilder = new TelegramMessageBuilder();
 
-            return messageBuilder.ToString();
+            return messageBuilder.AddText(message)
+                                 .ToString();
         }
     }
 }

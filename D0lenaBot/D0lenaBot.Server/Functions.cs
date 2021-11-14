@@ -100,8 +100,8 @@ namespace D0lenaBot.Server
                     await this.sendWelcomeMessageCommand.Send(chatId);
                     break;
                 case "/subscribe":
-                    string firstName = data.message.chat.first_name.ToString();
-                    string lastName = data.message.chat.last_name.ToString();
+                    string firstName = data?.message?.chat?.first_name?.ToString();
+                    string lastName = data?.message?.chat?.last_name?.ToString();
                     await this.registerUserCommand.Register(chatId, firstName, lastName);
                     break;
                 case "/stop":

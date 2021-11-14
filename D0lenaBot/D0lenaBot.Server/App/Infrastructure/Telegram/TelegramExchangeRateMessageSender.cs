@@ -17,12 +17,10 @@ namespace D0lenaBot.Server.App.Infrastructure.Telegram
         private const string PARAM_VALUE_PARSE_MODE = "MarkdownV2";
 
         private readonly ITelegramMessageSender telegramMessageSender;
-        private readonly ITelegramMessageBuilder telegramMessageBuilder;
 
-        public TelegramExchangeRateMessageSender(ITelegramMessageSender telegramMessageSender, ITelegramMessageBuilder telegramMessageBuilder)
+        public TelegramExchangeRateMessageSender(ITelegramMessageSender telegramMessageSender)
         {
             this.telegramMessageSender = telegramMessageSender;
-            this.telegramMessageBuilder = telegramMessageBuilder;
         }
         public async Task SendExchangeRate(ExchangeRate exchangeRate, string chatId)
         {
@@ -41,10 +39,12 @@ namespace D0lenaBot.Server.App.Infrastructure.Telegram
             string exchangeRateText = string.Format("${0} / ${1}. ", exchangeRate.Rate.Buy.ToString(), exchangeRate.Rate.Sell.ToString());
             string average = string.Format(" Promedio: ${0}", exchangeRate.Rate.Average);
 
-            var messageBuilder = this.telegramMessageBuilder
-                                     .AddItalicText("Fecha: ").AddText(exchangeRate.ExchangeDateUTC.ToString("dd/MM/yyyy"))
-                                     .AddNewLine().AddNewLine().AddText("💵 ").AddText(exchangeRate.ProviderDescription)
-                                     .AddNewLine().AddBoldText(exchangeRateText).AddText(average);
+            var messageBuilder = new TelegramMessageBuilder();
+
+            messageBuilder.AddItalicText("Fecha: ").AddText(exchangeRate.ExchangeDateUTC.ToString("dd/MM/yyyy"));
+            
+            messageBuilder.AddNewLine().AddNewLine().AddText("💵 ").AddText(exchangeRate.ProviderDescription);
+            messageBuilder.AddNewLine().AddBoldText(exchangeRateText).AddText(average);
 
             return messageBuilder.ToString();
         }

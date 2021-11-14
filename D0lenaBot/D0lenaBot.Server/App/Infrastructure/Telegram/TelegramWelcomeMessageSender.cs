@@ -14,12 +14,10 @@ namespace D0lenaBot.Server.App.Infrastructure.Telegram
         private const string PARAM_VALUE_PARSE_MODE = "MarkdownV2";
 
         private readonly ITelegramMessageSender telegramMessageSender;
-        private readonly ITelegramMessageBuilder telegramMessageBuilder;
-
-        public TelegramWelcomeMessageSender(ITelegramMessageSender telegramMessageSender, ITelegramMessageBuilder telegramMessageBuilder)
+dw
+        public TelegramWelcomeMessageSender(ITelegramMessageSender telegramMessageSender)
         {
             this.telegramMessageSender = telegramMessageSender;
-            this.telegramMessageBuilder = telegramMessageBuilder;
         }
 
         public async Task Send(string chatId)
@@ -36,12 +34,14 @@ namespace D0lenaBot.Server.App.Infrastructure.Telegram
 
         private string GetText()
         {
-            var messageBuilder = this.telegramMessageBuilder
-                                     .AddText("Bienvenido! Mi nombre es ").AddBoldText("D0lenaBot").AddText(" y estoy acá para ayudarte con la cotización del dólar blue en ").AddBoldText("Rosario").AddText(".").AddNewLine()
-                                     .AddNewLine().AddText("Para empezar, mandá alguno de los siguientes comandos:")
-                                     .AddNewLine().AddBulletPoint().AddText("/subscribe para empezar a recibir la cotización de lunes a viernes a las 11:30am")
-                                     .AddNewLine().AddBulletPoint().AddText("/stop para cancelar la suscripción")
-                                     .AddNewLine().AddBulletPoint().AddText("/coti para recibir la última cotización disponible. Útil cuando no te interesa recibir la cotización todos los días y preferís que te la mandemos cuando vos la necesitás");
+            var messageBuilder = new TelegramMessageBuilder();
+            messageBuilder.AddText("Bienvenido! Mi nombre es ").AddBoldText("D0lenaBot").AddText(" y estoy acá para ayudarte con la cotización del dólar blue en ").AddBoldText("Rosario").AddText(".").AddNewLine();
+            
+            messageBuilder.AddNewLine().AddText("Para empezar, mandá alguno de los siguientes comandos:");
+
+            messageBuilder.AddNewLine().AddBullet().AddText("/subscribe para empezar a recibir la cotización de lunes a viernes a las 11:30am");
+            messageBuilder.AddNewLine().AddBullet().AddText("/stop para cancelar la suscripción");
+            messageBuilder.AddNewLine().AddBullet().AddText("/coti para recibir la última cotización disponible. Útil cuando no te interesa recibir la cotización todos los días y preferís que te la mandemos cuando vos la necesitás");
 
             return messageBuilder.ToString();
         }

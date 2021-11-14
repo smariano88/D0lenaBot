@@ -9,7 +9,7 @@ namespace D0lenaBot.Server.App.Infrastructure.Telegram.Services
         ITelegramMessageBuilder AddBoldText(string text);
         ITelegramMessageBuilder AddItalicText(string text);
         ITelegramMessageBuilder AddNewLine();
-        ITelegramMessageBuilder AddBulletPoint();
+        ITelegramMessageBuilder AddBullet();
         string ToString();
     }
 
@@ -47,7 +47,7 @@ namespace D0lenaBot.Server.App.Infrastructure.Telegram.Services
             return this;
         }
 
-        public ITelegramMessageBuilder AddBulletPoint()
+        public ITelegramMessageBuilder AddBullet()
         {
             this.stringBuilder.Append("● ");//⚫
             return this;
