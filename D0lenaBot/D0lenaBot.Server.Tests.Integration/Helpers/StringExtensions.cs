@@ -2,7 +2,7 @@
 {
     public static class StringExtensions
     {
-        public static bool ContainsOnlyOnce(this string strings, string text)
+        public static int ContainsCount(this string strings, string text)
         {
             int count = 0;
             int i = 0;
@@ -11,12 +11,7 @@
                 i += text.Length;
                 count++;
             }
-            if (count == 1)
-            {
-                return true;
-            }
-
-            return false;
+            return count;
         }
     }
 }

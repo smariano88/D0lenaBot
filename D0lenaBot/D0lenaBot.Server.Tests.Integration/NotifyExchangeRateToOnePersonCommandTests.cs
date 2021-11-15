@@ -32,7 +32,7 @@ namespace D0lenaBot.Server.Tests.Integration
         {
             await this.exchangeRatesRepositoryMock.Save(new ExchangeRate()
             {
-                ExchangeDateUTC = DateTime.UtcNow,
+                ExchangeDateUTC = new DateTime(2021, 11, 14),
                 Rate = new ExchangeRateValues(200, 201),
                 Provider = ExchangeProvider.DolarSi,
             });
@@ -57,10 +57,17 @@ namespace D0lenaBot.Server.Tests.Integration
 
             var textValue = message.QueryArgs["text"];
 
-            Assert.IsTrue(textValue.Contains("14/11/2021"));
-            Assert.IsTrue(textValue.Contains("💵 DolarSi"));
-            Assert.IsTrue(textValue.Contains("Promedio: $200,5"));
-            Assert.IsTrue(textValue.Contains("$200 / $201"));
+            var expectedDate = "14/11/2021";
+            Assert.IsTrue(textValue.Contains(expectedDate), $"Wrong date. Expected: {expectedDate}. Provided message: {textValue}");
+
+            var expectedProvider = "💵 DolarSi";
+            Assert.IsTrue(textValue.Contains(expectedProvider), $"Wrong provider. Expected: {expectedProvider}. Provided message: {textValue}");
+
+            var expectedAverage = "Promedio: $200,5";
+            Assert.IsTrue(textValue.Contains(expectedAverage), $"Wrong average. Expected: {expectedAverage}. Provided message: {textValue}");
+
+            var expectedExchangeRate = "$200 / $201";
+            Assert.IsTrue(textValue.Contains(expectedExchangeRate), $"Wrong exchange rate. Expected: {expectedExchangeRate}. Provided message: {textValue}");
         }
     }
 }

@@ -34,7 +34,7 @@ namespace D0lenaBot.Server.Tests.Integration
         {
             await this.exchangeRatesRepositoryMock.Save(new ExchangeRate()
             {
-                ExchangeDateUTC = DateTime.UtcNow,
+                ExchangeDateUTC = new DateTime(2021, 11, 14),
                 Rate = new ExchangeRateValues(200, 201),
                 Provider = ExchangeProvider.DolarSi,
             });
@@ -78,10 +78,10 @@ namespace D0lenaBot.Server.Tests.Integration
             {
                 var textValue = message.QueryArgs["text"];
 
-                Assert.IsTrue(textValue.ContainsOnlyOnce("14/11/2021"));
-                Assert.IsTrue(textValue.ContainsOnlyOnce("💵 DolarSi"));
-                Assert.IsTrue(textValue.ContainsOnlyOnce("Promedio: $200,5"));
-                Assert.IsTrue(textValue.ContainsOnlyOnce("$200 / $201"));
+                ExtendedAssert.ContainsTextOnlyOnce(textValue, "14/11/2021");
+                ExtendedAssert.ContainsTextOnlyOnce(textValue, "💵 DolarSi");
+                ExtendedAssert.ContainsTextOnlyOnce(textValue, "Promedio: $200,5");
+                ExtendedAssert.ContainsTextOnlyOnce(textValue, "$200 / $201");
             }
         }
     }
