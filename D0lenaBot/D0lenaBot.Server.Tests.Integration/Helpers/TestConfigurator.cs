@@ -1,15 +1,20 @@
 ﻿using D0lenaBot.Server.App.Application.Infrastructure;
+using D0lenaBot.Server.App.Infrastructure.DolarSi.Services;
 using D0lenaBot.Server.App.Infrastructure.Telegram.Services;
 using D0lenaBot.Server.Tests.Integration.Mocks;
+using HtmlAgilityPack;
 using Microsoft.Azure.WebJobs;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Moq;
+using System.IO;
 
 namespace D0lenaBot.Server.Tests.Integration
 {
     public class TestConfigurator
     {
         private IHost host;
+        private IWebJobsBuilder builder;
 
         public TestConfigurator()
         {
@@ -25,11 +30,31 @@ namespace D0lenaBot.Server.Tests.Integration
 
         private void ConfigureDependencies(IWebJobsBuilder builder)
         {
+            this.builder = builder;
             var startup = new Startup();
             startup.Configure(builder);
             builder.Services.AddScoped<IUsers, UsersRepositoryMock>();
             builder.Services.AddScoped<IExchangeRates, ExchangeRateRepositoryMock>();
             builder.Services.AddScoped<ITelegramMessageSender, TelegramMessageSenderMock>();
+            
+            this.ConfigureDolarSiHtmlLoader();
+        }
+
+        private void ConfigureDolarSiHtmlLoader()
+        {
+            var dolarSiHtmlLoaderMock = new Mock<IDolarSiHtmlLoader>();
+            dolarSiHtmlLoaderMock.Setup(m => m.Load(It.IsAny<string>())).ReturnsAsync(this.CreateMockHtmlDocument());
+            this.builder.Services.AddScoped<IDolarSiHtmlLoader>((something) => dolarSiHtmlLoaderMock.Object);
+        }
+
+        private HtmlDocument CreateMockHtmlDocument()
+        {
+            var directory = Directory.GetCurrentDirectory();
+            var path = Path.Combine(directory, "Static", "DolarSi.html");
+
+            var doc = new HtmlDocument();
+            doc.Load(path);
+            return doc;
         }
     }
 

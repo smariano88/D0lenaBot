@@ -1,12 +1,9 @@
 ﻿using D0lenaBot.Server.App.Application.NotifyAllExchangeRateCommand;
-using D0lenaBot.Server.App.Application.NotifyExchangeRateToOnePersonCommand;
-using D0lenaBot.Server.App.Application.RegisterUserCommand;
 using D0lenaBot.Server.App.Domain;
 using D0lenaBot.Server.Tests.Integration.Helpers;
 using D0lenaBot.Server.Tests.Integration.Mocks;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace D0lenaBot.Server.Tests.Integration

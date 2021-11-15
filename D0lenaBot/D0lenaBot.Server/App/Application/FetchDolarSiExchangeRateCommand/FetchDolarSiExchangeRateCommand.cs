@@ -1,5 +1,4 @@
 ﻿using D0lenaBot.Server.App.Application.Infrastructure;
-using System;
 using System.Threading.Tasks;
 
 namespace D0lenaBot.Server.App.Application.FetchDolarSiExchangeRateCommand
