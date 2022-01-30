@@ -1,11 +1,13 @@
 ﻿using D0lenaBot.Server.App.Application.Infrastructure;
 using D0lenaBot.Server.App.Domain;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
 namespace D0lenaBot.Server.Tests.Integration.Mocks
 {
+    // ToDo: implement a repository mock using a third party library
     public class ExchangeRateRepositoryMock : IExchangeRates
     {
         private List<ExchangeRate> ExchangeRates = new List<ExchangeRate>();
@@ -22,6 +24,11 @@ namespace D0lenaBot.Server.Tests.Integration.Mocks
         public async Task<List<ExchangeRate>> GetAll()
         {
             return this.ExchangeRates;
+        }
+
+        public async Task<IEnumerable<ExchangeRate>> GetExchangeRateFor(DateTime date)
+        {
+            return this.ExchangeRates.Where(e => e.ExchangeDateUTC == date);
         }
     }
 }

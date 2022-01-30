@@ -36,8 +36,16 @@ namespace D0lenaBot.Server.Tests.Integration
                 Rate = new ExchangeRateValues(200, 201),
                 Provider = ExchangeProvider.DolarSi,
             });
+
+            await this.exchangeRatesRepositoryMock.Save(new ExchangeRate()
+            {
+                ExchangeDateUTC = new DateTime(2021, 11, 14),
+                Rate = new ExchangeRateValues(100, 102),
+                Provider = ExchangeProvider.CotizacionCo,
+            });
         }
 
+        // ToDo: think about this test. Should we assert on the message?
         [TestMethod]
         public async Task It_send_a_message_with_the_latest_exchange_rate_to_the_user()
         {
@@ -60,7 +68,7 @@ namespace D0lenaBot.Server.Tests.Integration
             var expectedDate = "14/11/2021";
             Assert.IsTrue(textValue.Contains(expectedDate), $"Wrong date. Expected: {expectedDate}. Provided message: {textValue}");
 
-            var expectedProvider = "💵 DolarSi";
+            var expectedProvider = "DolarSi";
             Assert.IsTrue(textValue.Contains(expectedProvider), $"Wrong provider. Expected: {expectedProvider}. Provided message: {textValue}");
 
             var expectedAverage = "Promedio: $200,5";

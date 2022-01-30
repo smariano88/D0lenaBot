@@ -1,9 +1,8 @@
 ﻿using D0lenaBot.Server.App.Infrastructure.CotizacionCo.Services;
-using D0lenaBot.Server.App.Infrastructure.DolarSi.Services;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 
-namespace D0lenaBot.Server.UnitTest.App.Infrastructure.DolarSi.Services
+namespace D0lenaBot.Server.UnitTest.App.Infrastructure.CotizacionCo.Services
 {
     [TestClass]
     public class CotizacionCoValuesParserTests

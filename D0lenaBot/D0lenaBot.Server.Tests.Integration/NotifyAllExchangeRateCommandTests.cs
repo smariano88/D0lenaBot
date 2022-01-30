@@ -57,7 +57,7 @@ namespace D0lenaBot.Server.Tests.Integration
             });
         }
 
-
+        // ToDo: think about this test. Should we assert on the message?
         [TestMethod]
         public async Task It_send_a_message_with_the_latest_exchange_rate_to_all_the_users()
         {
@@ -79,7 +79,7 @@ namespace D0lenaBot.Server.Tests.Integration
                 var textValue = message.QueryArgs["text"];
 
                 ExtendedAssert.ContainsTextOnlyOnce(textValue, "14/11/2021");
-                ExtendedAssert.ContainsTextOnlyOnce(textValue, "💵 DolarSi");
+                ExtendedAssert.ContainsTextOnlyOnce(textValue, "DolarSi");
                 ExtendedAssert.ContainsTextOnlyOnce(textValue, "Promedio: $200,5");
                 ExtendedAssert.ContainsTextOnlyOnce(textValue, "$200 / $201");
             }

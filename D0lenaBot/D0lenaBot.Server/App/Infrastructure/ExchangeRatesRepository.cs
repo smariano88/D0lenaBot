@@ -87,5 +87,22 @@ namespace D0lenaBot.Server.App.Infrastructure
             this.container = await this.database.CreateContainerIfNotExistsAsync(this.containerId, "/ProviderDescription");
             Console.WriteLine("Created Container: {0}\n", this.container.Id);
         }
+
+        public async Task<IEnumerable<ExchangeRate>> GetExchangeRateFor(DateTime date)
+        {
+            await this.EnsureCreated();
+
+            try
+            {
+                return this.container.GetItemLinqQueryable<Domain.ExchangeRate>(true)
+                    .Where(e => e.ExchangeDateUTC == date)
+                    .AsEnumerable();
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                throw;
+            }
+        }
     }
 }

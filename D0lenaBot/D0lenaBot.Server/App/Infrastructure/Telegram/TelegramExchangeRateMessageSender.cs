@@ -2,6 +2,7 @@
 using D0lenaBot.Server.App.Domain;
 using D0lenaBot.Server.App.Infrastructure.Telegram.Services;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace D0lenaBot.Server.App.Infrastructure.Telegram
@@ -22,9 +23,9 @@ namespace D0lenaBot.Server.App.Infrastructure.Telegram
         {
             this.telegramMessageSender = telegramMessageSender;
         }
-        public async Task SendExchangeRate(ExchangeRate exchangeRate, string chatId)
+        public async Task SendExchangeRate(IEnumerable<ExchangeRate> exchangeRates, string chatId)
         {
-            var text = this.GetText(exchangeRate);
+            var text = this.GetText(exchangeRates);
 
             var args = new Dictionary<string, string>();
             args.Add(PARAM_NAME_TEXT, text);
@@ -34,17 +35,25 @@ namespace D0lenaBot.Server.App.Infrastructure.Telegram
             await this.telegramMessageSender.SendMessage(PATH, args);
         }
 
-        private string GetText(ExchangeRate exchangeRate)
+        private string GetText(IEnumerable<ExchangeRate> exchangeRates)
         {
-            string exchangeRateText = string.Format("${0} / ${1}. ", exchangeRate.Rate.Buy.ToString(), exchangeRate.Rate.Sell.ToString());
-            string average = string.Format(" Promedio: ${0}", exchangeRate.Rate.Average);
-
             var messageBuilder = new TelegramMessageBuilder();
+            if (exchangeRates.Count() == 0)
+            {
+                messageBuilder.AddNewLine().AddText("Todavia no hay cotización. Proba nuevamente más tarde");
+                return messageBuilder.ToString();
+            }
 
-            messageBuilder.AddItalicText("Fecha: ").AddText(exchangeRate.ExchangeDateUTC.ToString("dd/MM/yyyy"));
-            
-            messageBuilder.AddNewLine().AddNewLine().AddText("💵 ").AddText(exchangeRate.ProviderDescription);
-            messageBuilder.AddNewLine().AddBoldText(exchangeRateText).AddText(average);
+            messageBuilder.AddItalicText("Fecha: ").AddText(exchangeRates.First().ExchangeDateUTC.ToString("dd/MM/yyyy"));
+
+            foreach (var exchangeRate in exchangeRates)
+            {
+                string exchangeRateText = string.Format("${0} / ${1}. ", exchangeRate.Rate.Buy.ToString(), exchangeRate.Rate.Sell.ToString());
+                string average = string.Format(" Promedio: ${0}", exchangeRate.Rate.Average);
+
+                messageBuilder.AddNewLine().AddNewLine().AddText("💵 ").AddText(exchangeRate.ProviderDescription);
+                messageBuilder.AddNewLine().AddBoldText(exchangeRateText).AddText(average);
+            }
 
             return messageBuilder.ToString();
         }
