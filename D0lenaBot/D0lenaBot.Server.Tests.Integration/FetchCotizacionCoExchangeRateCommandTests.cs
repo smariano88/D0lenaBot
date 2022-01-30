@@ -1,4 +1,4 @@
-﻿using D0lenaBot.Server.App.Application.FetchDolarSiExchangeRateCommand;
+﻿using D0lenaBot.Server.App.Application.FetchCotizacionCoExchangeRateCommand;
 using D0lenaBot.Server.App.Domain;
 using D0lenaBot.Server.Tests.Integration.Mocks;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -9,11 +9,11 @@ using System.Threading.Tasks;
 namespace D0lenaBot.Server.Tests.Integration
 {
     [TestClass]
-    public class FetchDolarSiExchangeRateCommandTests
+    public class FetchCotizacionCoExchangeRateCommandTests
     {
         private ExchangeRateRepositoryMock exchangeRateRepositoryMock;
 
-        private IFetchDolarSiExchangeRateCommand target;
+        private IFetchCotizacionCoExchangeRateCommand target;
 
         [TestInitialize]
         public void Initialize()
@@ -22,7 +22,7 @@ namespace D0lenaBot.Server.Tests.Integration
 
             this.exchangeRateRepositoryMock = testConfigurator.GetExchangeRatesRepositoryMock();
 
-            this.target = testConfigurator.GetInstance<IFetchDolarSiExchangeRateCommand>();
+            this.target = testConfigurator.GetInstance<IFetchCotizacionCoExchangeRateCommand>();
         }
 
         [TestMethod]
@@ -36,10 +36,10 @@ namespace D0lenaBot.Server.Tests.Integration
             Assert.AreEqual(1, exchangeRates.Count());
 
             var exchangeRate = exchangeRates.Single();
-            Assert.AreEqual(exchangeRate.Rate.Buy, 194.50m);
-            Assert.AreEqual(exchangeRate.Rate.Sell, 197.50m);
-            Assert.AreEqual(exchangeRate.Provider, ExchangeProvider.DolarSi);
-            Assert.AreEqual(exchangeRate.ExchangeDateUTC, new DateTime(2021, 10, 29, 0, 0, 0, DateTimeKind.Utc));
+            Assert.AreEqual(exchangeRate.Rate.Buy, 206.50m);
+            Assert.AreEqual(exchangeRate.Rate.Sell, 213);
+            Assert.AreEqual(exchangeRate.Provider, ExchangeProvider.CotizacionCo);
+            Assert.AreEqual(exchangeRate.ExchangeDateUTC, new DateTime(2022, 1, 30, 0, 0, 0, DateTimeKind.Utc));
         }
     }
 }

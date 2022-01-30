@@ -38,5 +38,6 @@ namespace D0lenaBot.Server.App.Domain
     public enum ExchangeProvider
     {
         DolarSi = 1,
+        CotizacionCo = 2,
     }
 }

@@ -11,6 +11,7 @@ using System.IO;
 
 namespace D0lenaBot.Server.Tests.Integration
 {
+    // ToDo: Move one folder up
     public class TestConfigurator
     {
         private IHost host;
@@ -36,21 +37,29 @@ namespace D0lenaBot.Server.Tests.Integration
             builder.Services.AddScoped<IUsers, UsersRepositoryMock>();
             builder.Services.AddScoped<IExchangeRates, ExchangeRateRepositoryMock>();
             builder.Services.AddScoped<ITelegramMessageSender, TelegramMessageSenderMock>();
-            
-            this.ConfigureDolarSiHtmlLoader();
+
+            this.ConfigureHtmlLoader();
         }
 
-        private void ConfigureDolarSiHtmlLoader()
+        private void ConfigureHtmlLoader()
         {
             var dolarSiHtmlLoaderMock = new Mock<IDolarSiHtmlLoader>();
-            dolarSiHtmlLoaderMock.Setup(m => m.Load(It.IsAny<string>())).ReturnsAsync(this.CreateMockHtmlDocument());
+            dolarSiHtmlLoaderMock
+                .Setup(m => m.Load("https://www.dolarsi.com/func/cotizacion_dolar_blue.php"))
+                .ReturnsAsync(this.CreateMockHtmlDocument("DolarSi.html"));
+
+            dolarSiHtmlLoaderMock
+                .Setup(m => m.Load("https://www.cotizacion.co/rosario/"))
+                .ReturnsAsync(this.CreateMockHtmlDocument("CotizacionCo.html"));
+
             this.builder.Services.AddScoped<IDolarSiHtmlLoader>((something) => dolarSiHtmlLoaderMock.Object);
         }
 
-        private HtmlDocument CreateMockHtmlDocument()
+
+        private HtmlDocument CreateMockHtmlDocument(string fileName)
         {
             var directory = Directory.GetCurrentDirectory();
-            var path = Path.Combine(directory, "Static", "DolarSi.html");
+            var path = Path.Combine(directory, "Static", fileName);
 
             var doc = new HtmlDocument();
             doc.Load(path);

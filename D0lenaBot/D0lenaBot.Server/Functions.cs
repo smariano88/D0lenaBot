@@ -1,3 +1,4 @@
+using D0lenaBot.Server.App.Application.FetchCotizacionCoExchangeRateCommand;
 using D0lenaBot.Server.App.Application.FetchDolarSiExchangeRateCommand;
 using D0lenaBot.Server.App.Application.NotifyAllExchangeRateCommand;
 using D0lenaBot.Server.App.Application.NotifyExchangeRateToOnePersonCommand;
@@ -22,7 +23,8 @@ namespace D0lenaBot.Server
     // * Add constants to messages (or use some sort of factory)
     public class FetchDollarExchangeRates
     {
-        private readonly IFetchDolarSiExchangeRateCommand fetchDollarCommand;
+        private readonly IFetchDolarSiExchangeRateCommand fetchDolarSiExchangeRateCommand;
+        private readonly IFetchCotizacionCoExchangeRateCommand fetchCotizacionCoExchangeRateCommand;
         private readonly INotifyAllExchangeRateCommand notifyExchangeRateCommand;
         private readonly IRegisterUserCommand registerUserCommand;
         private readonly ISendWelcomeMessageCommand sendWelcomeMessageCommand;
@@ -30,14 +32,16 @@ namespace D0lenaBot.Server
         private readonly INotifyExchangeRateToOnePersonCommand notifyExchangeRateToOnePersonCommand;
 
         public FetchDollarExchangeRates(
-            IFetchDolarSiExchangeRateCommand fetchDollarCommand,
+            IFetchDolarSiExchangeRateCommand fetchDolarSiExchangeRateCommand,
+            IFetchCotizacionCoExchangeRateCommand fetchCotizacionCoExchangeRateCommand,
             INotifyAllExchangeRateCommand notifyExchangeRateCommand,
             IRegisterUserCommand registerUserCommand,
             ISendWelcomeMessageCommand sendWelcomeMessageCommand,
             IRemoveUserCommand removeUserCommand,
             INotifyExchangeRateToOnePersonCommand notifyExchangeRateToOnePersonCommand)
         {
-            this.fetchDollarCommand = fetchDollarCommand;
+            this.fetchDolarSiExchangeRateCommand = fetchDolarSiExchangeRateCommand;
+            this.fetchCotizacionCoExchangeRateCommand = fetchCotizacionCoExchangeRateCommand;
             this.notifyExchangeRateCommand = notifyExchangeRateCommand;
             this.registerUserCommand = registerUserCommand;
             this.sendWelcomeMessageCommand = sendWelcomeMessageCommand;
@@ -46,11 +50,38 @@ namespace D0lenaBot.Server
         }
 
         [FunctionName("FetchDolarSiTodaysExchangeRate")]
-        public async Task Run([TimerTrigger("0 30 14 * * 1-5")] TimerInfo myTimer, ILogger logger)
+        public async Task RunFetchDolarSiTodaysExchangeRate([TimerTrigger("0 30 14 * * 1-5")] TimerInfo myTimer, ILogger logger)
         {
             try
             {
-                await this.fetchDollarCommand.FetchTodaysExchangeRate();
+                await this.fetchDolarSiExchangeRateCommand.FetchTodaysExchangeRate();
+            }
+            catch (Exception ex)
+            {
+                logger.LogError(ex.Message, ex);
+                throw;
+            }
+        }
+
+        [FunctionName("FetchCotizacionCoTodaysExchangeRate")]
+        public async Task RunFetchCotizacionCoTodaysExchangeRate([TimerTrigger("0 30 14 * * 1-5")] TimerInfo myTimer, ILogger logger)
+        {
+            try
+            {
+                await this.fetchCotizacionCoExchangeRateCommand.FetchTodaysExchangeRate();
+            }
+            catch (Exception ex)
+            {
+                logger.LogError(ex.Message, ex);
+                throw;
+            }
+        }
+
+        [FunctionName("SendNotifictions")]
+        public async Task RunSendNotifictions([TimerTrigger("0 40 14 * * 1-5")] TimerInfo myTimer, ILogger logger)
+        {
+            try
+            {
                 await this.notifyExchangeRateCommand.Send();
             }
             catch (Exception ex)

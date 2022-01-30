@@ -1,4 +1,5 @@
-﻿using D0lenaBot.Server.App.Application.FetchDolarSiExchangeRateCommand;
+﻿using D0lenaBot.Server.App.Application.FetchCotizacionCoExchangeRateCommand;
+using D0lenaBot.Server.App.Application.FetchDolarSiExchangeRateCommand;
 using D0lenaBot.Server.App.Application.Infrastructure;
 using D0lenaBot.Server.App.Application.NotifyAllExchangeRateCommand;
 using D0lenaBot.Server.App.Application.NotifyExchangeRateToOnePersonCommand;
@@ -6,6 +7,8 @@ using D0lenaBot.Server.App.Application.RegisterUserCommand;
 using D0lenaBot.Server.App.Application.RemoveUserCommand;
 using D0lenaBot.Server.App.Application.SendWelcomeMessageCommand;
 using D0lenaBot.Server.App.Infrastructure;
+using D0lenaBot.Server.App.Infrastructure.CotizacionCo;
+using D0lenaBot.Server.App.Infrastructure.CotizacionCo.Services;
 using D0lenaBot.Server.App.Infrastructure.DolarSi;
 using D0lenaBot.Server.App.Infrastructure.DolarSi.Services;
 using D0lenaBot.Server.App.Infrastructure.Telegram;
@@ -23,6 +26,7 @@ namespace D0lenaBot.Server
         {
             // Commands and queries
             builder.Services.AddScoped<IFetchDolarSiExchangeRateCommand, FetchDolarSiExchangeRateCommand>();
+            builder.Services.AddScoped<IFetchCotizacionCoExchangeRateCommand, FetchCotizacionCoExchangeRateCommand>();
             builder.Services.AddScoped<INotifyAllExchangeRateCommand, NotifyAllExchangeRateCommand>();
             builder.Services.AddScoped<INotifyExchangeRateToOnePersonCommand, NotifyExchangeRateToOnePersonCommand>();
             builder.Services.AddScoped<IRegisterUserCommand, RegisterUserCommand>();
@@ -37,6 +41,9 @@ namespace D0lenaBot.Server
             builder.Services.AddScoped<IDolarSiProvider, DolarSiProvider>();
             builder.Services.AddScoped<IDolarSiHtmlLoader, DolarSiHtmlLoader>();
             builder.Services.AddScoped<IDolarSiValuesParser, DolarSiValuesParser>();
+
+            builder.Services.AddScoped<ICotizacionCoProvider, CotizacionCoProvider>();
+            builder.Services.AddScoped<ICotizacionCoValuesParser, CotizacionCoValuesParser>();
 
             // Telegram
             builder.Services.AddScoped<IWelcomeMessageSender, TelegramWelcomeMessageSender>();
