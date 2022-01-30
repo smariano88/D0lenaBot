@@ -69,7 +69,7 @@ namespace D0lenaBot.Server.App.Infrastructure
             catch (Exception ex)
             {
                 Console.WriteLine(ex.Message);
-                throw ex;
+                throw;
             }
         }
 

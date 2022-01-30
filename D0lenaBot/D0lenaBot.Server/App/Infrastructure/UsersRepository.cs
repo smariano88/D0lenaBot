@@ -51,7 +51,7 @@ namespace D0lenaBot.Server.App.Infrastructure
             catch (Exception ex)
             {
                 Console.WriteLine(ex.Message);
-                throw ex;
+                throw;
             }
 
             Console.WriteLine("saved");
@@ -66,30 +66,11 @@ namespace D0lenaBot.Server.App.Infrastructure
                 return this.container.GetItemLinqQueryable<Domain.User>(true)
                                      .AsEnumerable()
                                      .ToList();
-
-                //var sqlQueryText = $"SELECT * FROM c";
-
-                //Console.WriteLine("Running query: {0}\n", sqlQueryText);
-
-                //QueryDefinition queryDefinition = new QueryDefinition(sqlQueryText);
-                //FeedIterator<Domain.User> queryResultSetIterator = this.container.GetItemQueryIterator<Domain.User>(queryDefinition);
-
-                //List<Domain.User> users = new List<Domain.User>();
-                //while (queryResultSetIterator.HasMoreResults)
-                //{
-                //    FeedResponse<Domain.User> currentResultSet = await queryResultSetIterator.ReadNextAsync();
-                //    foreach (Domain.User family in currentResultSet)
-                //    {
-                //        users.Add(family);
-                //    }
-                //}
-
-                //return users;
             }
             catch (Exception ex)
             {
                 Console.WriteLine(ex.Message);
-                throw ex;
+                throw;
             }
         }
 
@@ -111,7 +92,7 @@ namespace D0lenaBot.Server.App.Infrastructure
             catch (Exception ex)
             {
                 Console.WriteLine(ex.Message);
-                throw ex;
+                throw;
             }
         }
 
@@ -128,7 +109,7 @@ namespace D0lenaBot.Server.App.Infrastructure
             catch (Exception ex)
             {
                 Console.WriteLine(ex.Message);
-                throw ex;
+                throw;
             }
 
             Console.WriteLine("removed");
